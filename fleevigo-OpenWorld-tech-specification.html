@@ -549,26 +549,6 @@
 └── <span class="folder">prisma/</span>
       </div>
 
-      <!-- Design Tokens -->
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Design Tokens</h3>
-      <div class="code-block">
-        <code><span class="comment">// tailwind.config.js</span>
-colors: {
-  primary: {
-    500: <span class="string">'#3b82f6'</span>,  <span class="comment">// Main blue</span>
-    600: <span class="string">'#2563eb'</span>,
-  },
-  pin: {
-    traffic: <span class="string">'#ef4444'</span>,    <span class="comment">// Red</span>
-    safety: <span class="string">'#f97316'</span>,     <span class="comment">// Orange</span>
-    deals: <span class="string">'#22c55e'</span>,      <span class="comment">// Green</span>
-    amenities: <span class="string">'#3b82f6'</span>,  <span class="comment">// Blue</span>
-    general: <span class="string">'#6b7280'</span>,    <span class="comment">// Gray</span>
-    user: <span class="string">'#a855f7'</span>,       <span class="comment">// Purple</span>
-    merchant: <span class="string">'#eab308'</span>,   <span class="comment">// Gold</span>
-  }
-}</code>
-      </div>
     </section>
 
     <!-- Backend Stack -->
@@ -672,97 +652,6 @@ colors: {
         </div>
       </div>
 
-      <!-- PostGIS Queries -->
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">PostGIS Queries</h3>
-      <div class="code-block">
-        <code><span class="comment">-- Find posts within 10km</span>
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> posts
-<span class="keyword">WHERE</span> <span class="function">ST_DWithin</span>(
-  location::geography,
-  <span class="function">ST_MakePoint</span>(lng, lat)::geography,
-  <span class="string">10000</span>  <span class="comment">-- meters</span>
-);
-
-<span class="comment">-- Find nearest safe zones</span>
-<span class="keyword">SELECT</span> *, <span class="function">ST_Distance</span>(
-  location::geography,
-  <span class="function">ST_MakePoint</span>(lng, lat)::geography
-) <span class="keyword">as</span> distance
-<span class="keyword">FROM</span> safe_zones
-<span class="keyword">ORDER BY</span> distance
-<span class="keyword">LIMIT</span> <span class="string">10</span>;</code>
-      </div>
-
-      <!-- Prisma Schema -->
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Prisma Schema</h3>
-      <div class="code-block">
-        <code><span class="keyword">model</span> User {
-  id        String    <span class="function">@id</span> <span class="function">@default</span>(cuid())
-  email     String?   <span class="function">@unique</span>
-  phone     String?   <span class="function">@unique</span>
-  name      String
-  username  String    <span class="function">@unique</span>
-  userTypes UserType[]
-  points    Int       <span class="function">@default</span>(<span class="string">0</span>)
-  posts     Post[]
-  badges    UserBadge[]
-}
-
-<span class="keyword">model</span> Post {
-  id        String    <span class="function">@id</span> <span class="function">@default</span>(cuid())
-  content   String
-  category  Category
-  location  Unsupported(<span class="string">"geography(Point, 4326)"</span>)
-  city      String
-  authorId  String
-  author    User      <span class="function">@relation</span>(fields: [authorId])
-  pin       Pin?
-  comments  Comment[]
-  createdAt DateTime  <span class="function">@default</span>(now())
-}
-
-<span class="keyword">enum</span> Category {
-  TRAFFIC
-  SAFETY
-  DEALS
-  AMENITIES
-  GENERAL
-}</code>
-      </div>
-
-      <!-- RLS Example -->
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Row Level Security</h3>
-      <div class="code-block">
-        <code><span class="comment">-- Anyone can read posts</span>
-<span class="keyword">CREATE POLICY</span> <span class="string">"Posts public read"</span>
-<span class="keyword">ON</span> posts <span class="keyword">FOR SELECT USING</span> (<span class="string">true</span>);
-
-<span class="comment">-- Only author can update</span>
-<span class="keyword">CREATE POLICY</span> <span class="string">"Authors update own"</span>
-<span class="keyword">ON</span> posts <span class="keyword">FOR UPDATE</span>
-<span class="keyword">USING</span> (auth.uid() = author_id);</code>
-      </div>
-
-      <!-- Who's Around Example -->
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Realtime: Who's Around</h3>
-      <div class="code-block">
-        <code><span class="keyword">const</span> channel = supabase.<span class="function">channel</span>(<span class="string">'city:milan'</span>)
-
-channel
-  .<span class="function">on</span>(<span class="string">'presence'</span>, { event: <span class="string">'sync'</span> }, () => {
-    <span class="keyword">const</span> users = channel.<span class="function">presenceState</span>()
-    <span class="comment">// Update map with nearby users</span>
-  })
-  .<span class="function">subscribe</span>(<span class="keyword">async</span> (status) => {
-    <span class="keyword">if</span> (status === <span class="string">'SUBSCRIBED'</span>) {
-      <span class="keyword">await</span> channel.<span class="function">track</span>({
-        id: user.id,
-        location: { lat, lng },
-        userType: <span class="string">'RIDER'</span>
-      })
-    }
-  })</code>
-      </div>
     </section>
 
     <!-- Security -->
@@ -836,18 +725,7 @@ channel
         <h2 class="section-title">Performance</h2>
       </div>
 
-      <h3 style="margin-bottom: 1rem; font-weight: 600;">Database Indexes</h3>
-      <div class="code-block">
-        <code><span class="comment">-- Spatial index (critical)</span>
-<span class="keyword">CREATE INDEX</span> posts_location_idx
-<span class="keyword">ON</span> posts <span class="keyword">USING</span> GIST(location);
-
-<span class="comment">-- Feed queries</span>
-<span class="keyword">CREATE INDEX</span> posts_city_created_idx
-<span class="keyword">ON</span> posts(city, created_at DESC);</code>
-      </div>
-
-      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Caching Strategy</h3>
+      <h3 style="margin-bottom: 1rem; font-weight: 600;">Caching Strategy</h3>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -908,37 +786,6 @@ channel
           </div>
           <div class="cost-total"><span>Total</span><span>~$1,150/month</span></div>
         </div>
-      </div>
-    </section>
-
-    <!-- Environment Variables -->
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-        </div>
-        <h2 class="section-title">Environment Variables</h2>
-      </div>
-
-      <div class="code-block">
-        <code><span class="comment"># Supabase</span>
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-
-<span class="comment"># Database</span>
-DATABASE_URL=
-
-<span class="comment"># Mapbox</span>
-NEXT_PUBLIC_MAPBOX_TOKEN=
-
-<span class="comment"># Services</span>
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-RESEND_API_KEY=</code>
       </div>
     </section>
 
