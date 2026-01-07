@@ -322,7 +322,7 @@
 <body>
   <nav class="nav">
     <div class="nav-inner">
-      <a href="development-plan.html" class="logo">
+      <a href="index.html" class="logo">
         <div class="logo-icon">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -331,9 +331,10 @@
         <span class="logo-text">Fleevigo Community</span>
       </a>
       <div class="nav-links">
-        <a href="development-plan.html" class="nav-link">Development</a>
-        <a href="financial-estimates.html" class="nav-link active">Finance</a>
-        <a href="tech-stack.html" class="nav-link">Tech Stack</a>
+        <a href="fleevigo-OpenWorld-development-plan.html" class="nav-link">Development</a>
+        <a href="fleevigo-OpenWorld-financial-estimates.html" class="nav-link active">Finance</a>
+        <a href="fleevigo-OpenWorld-tech-stack.html" class="nav-link">Tech Stack</a>
+        <a href="fleevigo-OpenWorld-tech-specification.html" class="nav-link">Specification</a>
       </div>
     </div>
   </nav>
@@ -368,28 +369,81 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
           </svg>
         </div>
-        <h2 class="section-title">Investment Overview</h2>
+        <h2 class="section-title">Investment Options</h2>
+      </div>
+      <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        Epic Growth offers two engagement models for the Fleevigo Community project. Choose the option that best fits your needs.
+      </p>
+      <div class="commercial-grid" style="margin-bottom: 2rem;">
+        <div class="commercial-option recommended" style="border: 2px solid var(--primary);">
+          <div class="commercial-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: var(--primary-foreground);">
+            <div class="commercial-badge" style="background: rgba(255,255,255,0.2);">Recommended</div>
+            <div class="commercial-title">Fixed-Price Development</div>
+            <div class="commercial-desc">Complete development for a fixed investment</div>
+          </div>
+          <div class="commercial-content">
+            <div style="text-align: center; padding: 1.5rem 0;">
+              <div style="font-size: 2.5rem; font-weight: 900; color: var(--foreground);">€10,000</div>
+              <div style="font-size: 0.875rem; color: var(--muted-foreground);">per phase</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem; background: var(--muted); border-radius: var(--radius);">
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.25rem;">€10,000</div>
+                <div style="font-size: 0.75rem; color: var(--muted-foreground);">Phase 1 (MVP)</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-weight: 700; font-size: 1.25rem;">€10,000</div>
+                <div style="font-size: 0.75rem; color: var(--muted-foreground);">Phase 2 (Growth)</div>
+              </div>
+            </div>
+            <ul class="commercial-list" style="margin-top: 1rem;">
+              <li>All development as specified in Development Plan</li>
+              <li>Specialists sourced and paid by Epic Growth</li>
+              <li>Security audits included</li>
+              <li>Project management and coordination</li>
+              <li>Testing, deployment, and documentation</li>
+              <li>30-day post-launch bug fixes</li>
+            </ul>
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--accent); border-radius: var(--radius); text-align: center;">
+              <div style="font-weight: 700; font-size: 1.5rem;">€20,000</div>
+              <div style="font-size: 0.75rem; color: var(--muted-foreground);">Total for both phases</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="commercial-option">
+          <div class="commercial-header">
+            <div class="commercial-title">Retainer Consultancy</div>
+            <div class="commercial-desc">Joint development with monthly retainer</div>
+          </div>
+          <div class="commercial-content">
+            <div style="text-align: center; padding: 1.5rem 0;">
+              <div style="font-size: 2.5rem; font-weight: 900; color: var(--foreground);">€3,000</div>
+              <div style="font-size: 0.875rem; color: var(--muted-foreground);">per month</div>
+            </div>
+            <div style="padding: 1rem; background: var(--muted); border-radius: var(--radius); text-align: center;">
+              <div style="font-weight: 600;">Flexible Duration</div>
+              <div style="font-size: 0.75rem; color: var(--muted-foreground);">Continue as long as needed</div>
+            </div>
+            <ul class="commercial-list" style="margin-top: 1rem;">
+              <li>Joint development partnership</li>
+              <li>Dedicated project management</li>
+              <li>Weekly status updates and planning</li>
+              <li>Flexible prioritization of features</li>
+              <li>Continuous delivery approach</li>
+              <li>Direct communication channels</li>
+            </ul>
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--muted); border-radius: var(--radius); font-size: 0.875rem; color: var(--muted-foreground);">
+              <strong>Best for:</strong> Evolving requirements, ongoing collaboration, and flexibility to adjust priorities based on user feedback.
+            </div>
+          </div>
+        </div>
       </div>
       <div class="summary-grid">
-        <div class="summary-card">
-          <div class="summary-label">Phase 1 Development (CAPEX)</div>
-          <div class="summary-value">€<span class="price-blank">______</span></div>
-          <div class="summary-sub">6 months • Core Platform MVP</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Phase 2 Development (CAPEX)</div>
-          <div class="summary-value">€<span class="price-blank">______</span></div>
-          <div class="summary-sub">4-6 months • Growth & Expansion</div>
-        </div>
         <div class="summary-card">
           <div class="summary-label">Monthly Operations (OpEx)</div>
           <div class="summary-value">€57-817</div>
           <div class="summary-sub">Variable by user volume</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Total Project CAPEX</div>
-          <div class="summary-value">€<span class="price-blank">______</span></div>
-          <div class="summary-sub">10-12 months total</div>
         </div>
       </div>
     </section>
@@ -406,48 +460,44 @@
       </div>
       
       <div class="phase-header">
-        <span>Development Investment</span>
+        <span>Development Scope</span>
         <span>6 months (23 weeks)</span>
       </div>
       <div class="phase-content">
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Development Area</th><th>Duration</th><th>Investment</th></tr>
+              <tr><th>Development Area</th><th>Duration</th></tr>
             </thead>
             <tbody>
-              <tr><td>Foundation & Infrastructure</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Map & Location Features</td><td>4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Community & Social Features</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Communication Features</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Safety Features (SOS)</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Gamification</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>UI/UX Implementation</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Testing, Deployment & Documentation</td><td>4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Foundation & Infrastructure</td><td>2 weeks</td></tr>
+              <tr><td>Map & Location Features</td><td>4 weeks</td></tr>
+              <tr><td>Community & Social Features</td><td>3 weeks</td></tr>
+              <tr><td>Communication Features</td><td>3 weeks</td></tr>
+              <tr><td>Safety Features (SOS)</td><td>2 weeks</td></tr>
+              <tr><td>Gamification</td><td>3 weeks</td></tr>
+              <tr><td>UI/UX Implementation</td><td>2 weeks</td></tr>
+              <tr><td>Testing, Deployment & Documentation</td><td>4 weeks</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="phase-total">
-          <span>Development Subtotal (23 weeks)</span>
-          <span>€<span class="price-blank">______</span></span>
-        </div>
 
-        <h4 style="margin-top: 1.5rem; font-weight: 600;">Additional Costs</h4>
+        <h4 style="margin-top: 1.5rem; font-weight: 600;">Included Services</h4>
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Item</th><th>Timing</th><th>Investment</th></tr>
+              <tr><th>Item</th><th>Timing</th></tr>
             </thead>
             <tbody>
-              <tr><td>Project Management</td><td>6 months</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Security Audit</td><td>End of phase</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>DevOps Review</td><td>Mid-phase</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Project Management</td><td>Throughout phase</td></tr>
+              <tr><td>Security Audit</td><td>End of phase</td></tr>
+              <tr><td>DevOps Review</td><td>Mid-phase</td></tr>
             </tbody>
           </table>
         </div>
         <div class="phase-total" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: var(--primary-foreground);">
-          <span>Phase 1 Total</span>
-          <span>€<span class="price-blank" style="border-color: var(--primary-foreground);">______</span></span>
+          <span>Phase 1 Fixed Price</span>
+          <span>€10,000</span>
         </div>
       </div>
     </section>
@@ -464,47 +514,43 @@
       </div>
       
       <div class="phase-header" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);">
-        <span>Development Investment</span>
+        <span>Development Scope</span>
         <span>4-6 months</span>
       </div>
       <div class="phase-content">
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Development Area</th><th>Duration</th><th>Investment</th></tr>
+              <tr><th>Development Area</th><th>Duration</th></tr>
             </thead>
             <tbody>
-              <tr><td>UX Research & Optimization</td><td>6-8 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Merchant Platform</td><td>6-8 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Advanced Admin Dashboard</td><td>4-6 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Local Integrations (Malta & Kenya)</td><td>4-6 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Offline Support</td><td>3-4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Native App Preparation</td><td>2-3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>UX Research & Optimization</td><td>6-8 weeks</td></tr>
+              <tr><td>Merchant Platform</td><td>6-8 weeks</td></tr>
+              <tr><td>Advanced Admin Dashboard</td><td>4-6 weeks</td></tr>
+              <tr><td>Local Integrations (Malta & Kenya)</td><td>4-6 weeks</td></tr>
+              <tr><td>Offline Support</td><td>3-4 weeks</td></tr>
+              <tr><td>Native App Preparation</td><td>2-3 weeks</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="phase-total">
-          <span>Development Subtotal (4-6 months)</span>
-          <span>€<span class="price-blank">______</span></span>
-        </div>
 
-        <h4 style="margin-top: 1.5rem; font-weight: 600;">Additional Costs</h4>
+        <h4 style="margin-top: 1.5rem; font-weight: 600;">Included Services</h4>
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>Item</th><th>Timing</th><th>Investment</th></tr>
+              <tr><th>Item</th><th>Timing</th></tr>
             </thead>
             <tbody>
-              <tr><td>Project Management</td><td>4-6 months</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>UX Researcher</td><td>Research phase</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Payment Integration Specialist</td><td>Integration phase</td><td>€<span class="price-blank">______</span></td></tr>
-              <tr><td>Security Audit</td><td>End of phase</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Project Management</td><td>Throughout phase</td></tr>
+              <tr><td>UX Researcher</td><td>Research phase</td></tr>
+              <tr><td>Payment Integration Specialist</td><td>Integration phase</td></tr>
+              <tr><td>Security Audit</td><td>End of phase</td></tr>
             </tbody>
           </table>
         </div>
         <div class="phase-total" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%); color: white;">
-          <span>Phase 2 Total</span>
-          <span>€<span class="price-blank" style="border-color: white;">______</span></span>
+          <span>Phase 2 Fixed Price</span>
+          <span>€10,000</span>
         </div>
       </div>
     </section>
@@ -765,8 +811,9 @@
 
       <div class="commercial-grid">
         <!-- Option A: Fixed-Price -->
-        <div class="commercial-option">
-          <div class="commercial-header">
+        <div class="commercial-option recommended">
+          <div class="commercial-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: var(--primary-foreground);">
+            <div class="commercial-badge" style="background: rgba(255,255,255,0.2);">Recommended</div>
             <div class="commercial-title">Option A: Fixed-Price Development</div>
             <div class="commercial-desc">Full development delivered for a fixed price with milestone-based payments</div>
           </div>
@@ -775,8 +822,9 @@
               <div class="commercial-section-title">What's Included</div>
               <ul class="commercial-list">
                 <li>All development as specified in Development Plan</li>
+                <li><strong>Specialists sourced and paid by Epic Growth</strong></li>
                 <li>Project management and coordination</li>
-                <li>Specialist audits at defined checkpoints</li>
+                <li>Security audits at defined checkpoints</li>
                 <li>Testing and quality assurance</li>
                 <li>Deployment and documentation</li>
                 <li>30-day post-launch bug fixes (critical issues)</li>
@@ -792,31 +840,31 @@
               </ul>
             </div>
             <div class="commercial-section">
-              <div class="commercial-section-title">Estimated Investment</div>
+              <div class="commercial-section-title">Investment</div>
               <div style="font-size: 1.25rem; font-weight: 700;">
-                Phase 1: €<span class="price-blank">______</span><br>
-                Phase 2: €<span class="price-blank">______</span>
+                Phase 1: €10,000<br>
+                Phase 2: €10,000<br>
+                <span style="border-top: 2px solid var(--border); display: inline-block; padding-top: 0.5rem; margin-top: 0.5rem;">Total: €20,000</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Option B: Retainer -->
-        <div class="commercial-option recommended">
+        <div class="commercial-option">
           <div class="commercial-header">
-            <div class="commercial-badge">Recommended for Phase 2</div>
-            <div class="commercial-title">Option B: Consultancy Retainer</div>
-            <div class="commercial-desc">Monthly retainer for ongoing development leadership with flexible scope</div>
+            <div class="commercial-title">Option B: Retainer Consultancy</div>
+            <div class="commercial-desc">Monthly retainer for joint development with flexible scope</div>
           </div>
           <div class="commercial-content">
             <div class="commercial-section">
               <div class="commercial-section-title">What's Included</div>
               <ul class="commercial-list">
+                <li>Joint development partnership</li>
                 <li>Dedicated project management</li>
                 <li>Weekly status updates and planning</li>
                 <li>Flexible prioritization of features</li>
                 <li>Continuous delivery approach</li>
-                <li>Ongoing code quality oversight</li>
                 <li>Direct communication channels</li>
               </ul>
             </div>
@@ -832,7 +880,7 @@
             <div class="commercial-section">
               <div class="commercial-section-title">Monthly Retainer</div>
               <div style="font-size: 1.25rem; font-weight: 700;">
-                €<span class="price-blank">______</span>/month
+                €3,000/month
               </div>
             </div>
           </div>

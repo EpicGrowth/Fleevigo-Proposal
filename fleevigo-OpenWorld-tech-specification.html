@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleevigo Community | Technical Specification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: oklch(0.85 0.18 85);
+      --primary-hover: oklch(0.80 0.18 85);
+      --primary-foreground: oklch(0.1 0.02 260);
+      --secondary: oklch(0.7 0.2 30);
+      --secondary-foreground: oklch(1 0 0);
+      --accent: oklch(0.92 0.08 85);
+      --background: oklch(0.98 0.01 90);
+      --foreground: oklch(0.15 0.02 260);
+      --card: oklch(1 0 0);
+      --muted: oklch(0.96 0.01 90);
+      --muted-foreground: oklch(0.45 0.02 260);
+      --border: oklch(0.9 0.02 90);
+      --radius: 0.75rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--foreground);
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .logo-text { font-weight: 900; font-size: 1.125rem; letter-spacing: -0.025em; }
+
+    .nav-links { display: flex; gap: 0.25rem; }
+
+    .nav-link {
+      padding: 0.5rem 1rem; border-radius: var(--radius);
+      text-decoration: none; color: var(--muted-foreground);
+      font-weight: 500; font-size: 0.875rem; transition: all 0.2s;
+    }
+
+    .nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 4rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+      color: white; margin-bottom: 0.5rem; letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle { font-size: 1.125rem; color: rgba(255,255,255,0.8); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section { margin-bottom: 3rem; }
+
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+    .section-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .section-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .section-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+
+    /* Architecture Diagram */
+    .arch-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem; overflow-x: auto;
+    }
+
+    .arch-diagram {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      white-space: pre;
+      color: var(--foreground);
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto; border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--muted); font-weight: 600;
+      color: var(--foreground);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: var(--accent); }
+
+    /* Code blocks */
+    .code-block {
+      background: #1a1a2e; border-radius: var(--radius);
+      padding: 1.25rem; overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .code-block code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .code-block .comment { color: #6b7280; }
+    .code-block .keyword { color: #f472b6; }
+    .code-block .string { color: #34d399; }
+    .code-block .function { color: #60a5fa; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;
+    }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+      transition: all 0.3s;
+    }
+
+    .card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+    .card-header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+    }
+
+    .card-icon {
+      width: 40px; height: 40px; border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; flex-shrink: 0;
+    }
+
+    .card-title { font-weight: 600; }
+    .card-subtitle { font-size: 0.75rem; color: var(--muted-foreground); }
+
+    .card-content { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    /* Feature list */
+    .feature-list {
+      list-style: none; margin-top: 0.75rem;
+    }
+
+    .feature-list li {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.25rem 0; font-size: 0.8rem;
+    }
+
+    .feature-list li::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--primary); border-radius: 50%;
+    }
+
+    /* Stack Summary Table */
+    .stack-table { margin-bottom: 2rem; }
+    .stack-table th:first-child { width: 120px; }
+    .stack-table th:nth-child(2) { width: 180px; }
+
+    /* Project Structure */
+    .file-tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; line-height: 1.8;
+      background: var(--muted); padding: 1.5rem;
+      border-radius: var(--radius);
+    }
+
+    .file-tree .folder { color: var(--primary); font-weight: 600; }
+    .file-tree .file { color: var(--muted-foreground); }
+    .file-tree .comment { color: #6b7280; font-style: italic; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    .badge-green { background: rgba(34, 197, 94, 0.1); color: rgb(22, 163, 74); }
+    .badge-blue { background: rgba(59, 130, 246, 0.1); color: rgb(37, 99, 235); }
+    .badge-red { background: rgba(239, 68, 68, 0.1); color: rgb(220, 38, 38); }
+
+    /* Cost tables */
+    .cost-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;
+    }
+
+    .cost-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+
+    .cost-header {
+      padding: 1rem 1.25rem; font-weight: 600;
+      background: var(--muted); border-bottom: 1px solid var(--border);
+    }
+
+    .cost-content { padding: 1rem 1.25rem; }
+
+    .cost-item {
+      display: flex; justify-content: space-between;
+      padding: 0.5rem 0; font-size: 0.875rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cost-item:last-child { border-bottom: none; }
+
+    .cost-total {
+      display: flex; justify-content: space-between;
+      padding: 1rem 1.25rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--primary-foreground);
+    }
+
+    .note-box {
+      background: var(--accent); border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem; border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 1.5rem; font-size: 0.875rem;
+    }
+
+    .note-box strong { color: var(--primary); }
+
+    .footer {
+      background: var(--foreground); color: var(--background);
+      padding: 2rem 1.5rem; text-align: center; margin-top: 3rem;
+    }
+
+    .footer-text { font-size: 0.875rem; opacity: 0.8; }
+
+    @media (max-width: 768px) {
+      .nav-links { gap: 0; }
+      .nav-link { padding: 0.5rem 0.5rem; font-size: 0.7rem; }
+      .hero { padding: 3rem 1rem; }
+      .container { padding: 2rem 1rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="logo-text">Fleevigo Community</span>
+      </a>
+      <div class="nav-links">
+        <a href="fleevigo-OpenWorld-development-plan.html" class="nav-link">Development</a>
+        <a href="fleevigo-OpenWorld-financial-estimates.html" class="nav-link">Finance</a>
+        <a href="fleevigo-OpenWorld-tech-stack.html" class="nav-link">Tech Stack</a>
+        <a href="fleevigo-OpenWorld-tech-specification.html" class="nav-link active">Specification</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Technical Specification</h1>
+      <p class="hero-subtitle">Complete Technical Architecture & Implementation Details</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Architecture Overview -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Architecture Overview</h2>
+      </div>
+
+      <div class="arch-box">
+        <pre class="arch-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                 CLIENTS                                      │
+├──────────────────────────┬──────────────────────────┬───────────────────────┤
+│      Web App             │      Mobile Web          │    Future Native      │
+│   (React + Next.js)      │    (Responsive)          │   (React Native)      │
+└──────────────────────────┴──────────────────────────┴───────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              API GATEWAY                                     │
+│                        (Next.js API Routes / Vercel)                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+         ┌────────────────────────────┼────────────────────────────┐
+         ▼                            ▼                            ▼
+┌─────────────────┐        ┌─────────────────┐        ┌─────────────────┐
+│   AUTH          │        │   CORE API      │        │   REAL-TIME     │
+│   (Supabase     │        │   (Next.js +    │        │   (Supabase     │
+│    Auth)        │        │    Prisma)      │        │    Realtime)    │
+└─────────────────┘        └─────────────────┘        └─────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              DATABASE LAYER                                  │
+│                     PostgreSQL (Supabase) + PostGIS                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+         ┌────────────────────────────┼────────────────────────────┐
+         ▼                            ▼                            ▼
+┌─────────────────┐        ┌─────────────────┐        ┌─────────────────┐
+│   FILE STORAGE  │        │   MAPS          │        │   EXTERNAL      │
+│   (Supabase     │        │   (Mapbox)      │        │   SERVICES      │
+│    Storage)     │        │                 │        │                 │
+└─────────────────┘        └─────────────────┘        └─────────────────┘
+        </pre>
+      </div>
+    </section>
+
+    <!-- Stack Summary -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Stack Summary</h2>
+      </div>
+
+      <div class="table-wrapper stack-table">
+        <table>
+          <thead>
+            <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Frontend</strong></td><td>React + Next.js 14</td><td>Industry standard, SSR, great DX</td></tr>
+            <tr><td><strong>Styling</strong></td><td>Tailwind CSS + shadcn/ui</td><td>Rapid development, consistency</td></tr>
+            <tr><td><strong>State</strong></td><td>Zustand + React Query</td><td>Lightweight, server state caching</td></tr>
+            <tr><td><strong>Database</strong></td><td>PostgreSQL (Supabase)</td><td>PostGIS, real-time, auth included</td></tr>
+            <tr><td><strong>ORM</strong></td><td>Prisma</td><td>Type-safe, great DX</td></tr>
+            <tr><td><strong>Auth</strong></td><td>Supabase Auth</td><td>OAuth, magic links, RLS</td></tr>
+            <tr><td><strong>Real-time</strong></td><td>Supabase Realtime</td><td>WebSocket, presence</td></tr>
+            <tr><td><strong>Maps</strong></td><td>Mapbox GL JS</td><td>Best customization, clustering</td></tr>
+            <tr><td><strong>Storage</strong></td><td>Supabase Storage</td><td>Integrated, CDN</td></tr>
+            <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Edge network, Next.js optimized</td></tr>
+            <tr><td><strong>Push</strong></td><td>OneSignal</td><td>Cross-platform, free tier</td></tr>
+            <tr><td><strong>SMS</strong></td><td>Twilio</td><td>Reliable, global</td></tr>
+            <tr><td><strong>Email</strong></td><td>Resend</td><td>Developer-friendly</td></tr>
+            <tr><td><strong>Analytics</strong></td><td>Mixpanel</td><td>Event-based</td></tr>
+            <tr><td><strong>Monitoring</strong></td><td>Sentry</td><td>Error tracking</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Frontend Stack -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Frontend Stack</h2>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #000 0%, #333 100%); color: white;">N</div>
+            <div>
+              <div class="card-title">Next.js 14</div>
+              <div class="card-subtitle">React Framework</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Version</strong></td><td>14.x (App Router)</td></tr>
+                <tr><td><strong>Rendering</strong></td><td>SSR + Client Components</td></tr>
+                <tr><td><strong>Routing</strong></td><td>File-based App Router</td></tr>
+                <tr><td><strong>API</strong></td><td>Route Handlers</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>Server-side rendering for SEO</li>
+              <li>API routes = no separate backend</li>
+              <li>Image optimization built-in</li>
+              <li>Edge deployment ready</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); color: white;">T</div>
+            <div>
+              <div class="card-title">Tailwind CSS + shadcn/ui</div>
+              <div class="card-subtitle">Styling System</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Tailwind</strong></td><td>v3.4+ with JIT</td></tr>
+                <tr><td><strong>shadcn/ui</strong></td><td>Copy-paste components</td></tr>
+                <tr><td><strong>Icons</strong></td><td>Lucide React</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>Utility-first, no context switching</li>
+              <li>Beautiful, accessible, customizable</li>
+              <li>You own the code</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white;">S</div>
+            <div>
+              <div class="card-title">State Management</div>
+              <div class="card-subtitle">Zustand + React Query</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Zustand</strong></td><td>Client state (UI, preferences)</td></tr>
+                <tr><td><strong>React Query</strong></td><td>Server state (API, caching)</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>Simple, no boilerplate</li>
+              <li>Caching, refetching, sync</li>
+              <li>Clear separation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%); color: white;">M</div>
+            <div>
+              <div class="card-title">Mapbox GL JS</div>
+              <div class="card-subtitle">Mapping Platform</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Library</strong></td><td>mapbox-gl + react-map-gl</td></tr>
+                <tr><td><strong>Free Tier</strong></td><td>50,000 map loads/month</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>Custom markers</li>
+              <li>Built-in clustering</li>
+              <li>Custom popups</li>
+              <li>Traffic layer</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Structure -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Project Structure</h3>
+      <div class="file-tree">
+<span class="folder">fleevigo/</span>
+├── <span class="folder">app/</span>
+│   ├── <span class="folder">(auth)/</span>
+│   │   ├── <span class="folder">login/</span>
+│   │   └── <span class="folder">register/</span>
+│   ├── <span class="folder">(main)/</span>
+│   │   ├── <span class="folder">feed/</span>
+│   │   ├── <span class="folder">map/</span>
+│   │   ├── <span class="folder">post/</span>
+│   │   └── <span class="folder">profile/</span>
+│   ├── <span class="folder">(merchant)/</span>
+│   │   └── <span class="folder">dashboard/</span>
+│   ├── <span class="folder">api/</span>
+│   │   ├── <span class="folder">posts/</span>
+│   │   ├── <span class="folder">pins/</span>
+│   │   └── <span class="folder">users/</span>
+│   └── <span class="file">layout.tsx</span>
+├── <span class="folder">components/</span>
+│   ├── <span class="folder">ui/</span>           <span class="comment"># shadcn</span>
+│   ├── <span class="folder">feed/</span>
+│   ├── <span class="folder">map/</span>
+│   └── <span class="folder">shared/</span>
+├── <span class="folder">lib/</span>
+│   ├── <span class="folder">supabase/</span>
+│   └── <span class="folder">utils/</span>
+├── <span class="folder">stores/</span>           <span class="comment"># Zustand</span>
+├── <span class="folder">types/</span>
+└── <span class="folder">prisma/</span>
+      </div>
+
+      <!-- Design Tokens -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Design Tokens</h3>
+      <div class="code-block">
+        <code><span class="comment">// tailwind.config.js</span>
+colors: {
+  primary: {
+    500: <span class="string">'#3b82f6'</span>,  <span class="comment">// Main blue</span>
+    600: <span class="string">'#2563eb'</span>,
+  },
+  pin: {
+    traffic: <span class="string">'#ef4444'</span>,    <span class="comment">// Red</span>
+    safety: <span class="string">'#f97316'</span>,     <span class="comment">// Orange</span>
+    deals: <span class="string">'#22c55e'</span>,      <span class="comment">// Green</span>
+    amenities: <span class="string">'#3b82f6'</span>,  <span class="comment">// Blue</span>
+    general: <span class="string">'#6b7280'</span>,    <span class="comment">// Gray</span>
+    user: <span class="string">'#a855f7'</span>,       <span class="comment">// Purple</span>
+    merchant: <span class="string">'#eab308'</span>,   <span class="comment">// Gold</span>
+  }
+}</code>
+      </div>
+    </section>
+
+    <!-- Backend Stack -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Backend Stack</h2>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); color: white;">P</div>
+            <div>
+              <div class="card-title">PostgreSQL + Supabase</div>
+              <div class="card-subtitle">Database Layer</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Database</strong></td><td>PostgreSQL 15</td></tr>
+                <tr><td><strong>Hosting</strong></td><td>Supabase (managed)</td></tr>
+                <tr><td><strong>Extensions</strong></td><td>PostGIS for geospatial</td></tr>
+                <tr><td><strong>ORM</strong></td><td>Prisma</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>PostGIS for location queries</li>
+              <li>Row-level security</li>
+              <li>Real-time subscriptions</li>
+              <li>Auth + storage bundled</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white;">P</div>
+            <div>
+              <div class="card-title">Prisma ORM</div>
+              <div class="card-subtitle">Type-safe Database Access</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Version</strong></td><td>5.x</td></tr>
+                <tr><td><strong>Features</strong></td><td>Migrations, types, relations</td></tr>
+              </table>
+            </div>
+            <ul class="feature-list">
+              <li>Auto-generated types</li>
+              <li>Database migrations</li>
+              <li>Query optimization</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); color: white;">A</div>
+            <div>
+              <div class="card-title">Supabase Auth</div>
+              <div class="card-subtitle">Authentication</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td>Email/Password</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Phone/OTP</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Google OAuth</td><td><span class="badge badge-green">Supported</span></td></tr>
+                <tr><td>Apple Sign-In</td><td><span class="badge badge-green">Supported</span></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: white;">R</div>
+            <div>
+              <div class="card-title">Supabase Realtime</div>
+              <div class="card-subtitle">Live Updates</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper" style="margin-top: 0.5rem;">
+              <table>
+                <tr><td><strong>Broadcast</strong></td><td>SOS alerts</td></tr>
+                <tr><td><strong>Presence</strong></td><td>Who's Around</td></tr>
+                <tr><td><strong>DB Changes</strong></td><td>Live feed updates</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PostGIS Queries -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">PostGIS Queries</h3>
+      <div class="code-block">
+        <code><span class="comment">-- Find posts within 10km</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> posts
+<span class="keyword">WHERE</span> <span class="function">ST_DWithin</span>(
+  location::geography,
+  <span class="function">ST_MakePoint</span>(lng, lat)::geography,
+  <span class="string">10000</span>  <span class="comment">-- meters</span>
+);
+
+<span class="comment">-- Find nearest safe zones</span>
+<span class="keyword">SELECT</span> *, <span class="function">ST_Distance</span>(
+  location::geography,
+  <span class="function">ST_MakePoint</span>(lng, lat)::geography
+) <span class="keyword">as</span> distance
+<span class="keyword">FROM</span> safe_zones
+<span class="keyword">ORDER BY</span> distance
+<span class="keyword">LIMIT</span> <span class="string">10</span>;</code>
+      </div>
+
+      <!-- Prisma Schema -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Prisma Schema</h3>
+      <div class="code-block">
+        <code><span class="keyword">model</span> User {
+  id        String    <span class="function">@id</span> <span class="function">@default</span>(cuid())
+  email     String?   <span class="function">@unique</span>
+  phone     String?   <span class="function">@unique</span>
+  name      String
+  username  String    <span class="function">@unique</span>
+  userTypes UserType[]
+  points    Int       <span class="function">@default</span>(<span class="string">0</span>)
+  posts     Post[]
+  badges    UserBadge[]
+}
+
+<span class="keyword">model</span> Post {
+  id        String    <span class="function">@id</span> <span class="function">@default</span>(cuid())
+  content   String
+  category  Category
+  location  Unsupported(<span class="string">"geography(Point, 4326)"</span>)
+  city      String
+  authorId  String
+  author    User      <span class="function">@relation</span>(fields: [authorId])
+  pin       Pin?
+  comments  Comment[]
+  createdAt DateTime  <span class="function">@default</span>(now())
+}
+
+<span class="keyword">enum</span> Category {
+  TRAFFIC
+  SAFETY
+  DEALS
+  AMENITIES
+  GENERAL
+}</code>
+      </div>
+
+      <!-- RLS Example -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Row Level Security</h3>
+      <div class="code-block">
+        <code><span class="comment">-- Anyone can read posts</span>
+<span class="keyword">CREATE POLICY</span> <span class="string">"Posts public read"</span>
+<span class="keyword">ON</span> posts <span class="keyword">FOR SELECT USING</span> (<span class="string">true</span>);
+
+<span class="comment">-- Only author can update</span>
+<span class="keyword">CREATE POLICY</span> <span class="string">"Authors update own"</span>
+<span class="keyword">ON</span> posts <span class="keyword">FOR UPDATE</span>
+<span class="keyword">USING</span> (auth.uid() = author_id);</code>
+      </div>
+
+      <!-- Who's Around Example -->
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Realtime: Who's Around</h3>
+      <div class="code-block">
+        <code><span class="keyword">const</span> channel = supabase.<span class="function">channel</span>(<span class="string">'city:milan'</span>)
+
+channel
+  .<span class="function">on</span>(<span class="string">'presence'</span>, { event: <span class="string">'sync'</span> }, () => {
+    <span class="keyword">const</span> users = channel.<span class="function">presenceState</span>()
+    <span class="comment">// Update map with nearby users</span>
+  })
+  .<span class="function">subscribe</span>(<span class="keyword">async</span> (status) => {
+    <span class="keyword">if</span> (status === <span class="string">'SUBSCRIBED'</span>) {
+      <span class="keyword">await</span> channel.<span class="function">track</span>({
+        id: user.id,
+        location: { lat, lng },
+        userType: <span class="string">'RIDER'</span>
+      })
+    }
+  })</code>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Security</h2>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Authentication</div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper">
+              <table>
+                <tr><td>Passwords</td><td>Bcrypt hashing</td></tr>
+                <tr><td>Tokens</td><td>JWT, short-lived</td></tr>
+                <tr><td>Sessions</td><td>Refresh token rotation</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Database</div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper">
+              <table>
+                <tr><td>RLS</td><td>All tables protected</td></tr>
+                <tr><td>Encryption</td><td>At rest (Supabase)</td></tr>
+                <tr><td>SSL</td><td>Required</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">API</div>
+          </div>
+          <div class="card-content">
+            <div class="table-wrapper">
+              <table>
+                <tr><td>HTTPS</td><td>Enforced</td></tr>
+                <tr><td>CORS</td><td>Restricted domains</td></tr>
+                <tr><td>Validation</td><td>Zod schemas</td></tr>
+                <tr><td>Rate limiting</td><td>Per IP/user</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Performance</h2>
+      </div>
+
+      <h3 style="margin-bottom: 1rem; font-weight: 600;">Database Indexes</h3>
+      <div class="code-block">
+        <code><span class="comment">-- Spatial index (critical)</span>
+<span class="keyword">CREATE INDEX</span> posts_location_idx
+<span class="keyword">ON</span> posts <span class="keyword">USING</span> GIST(location);
+
+<span class="comment">-- Feed queries</span>
+<span class="keyword">CREATE INDEX</span> posts_city_created_idx
+<span class="keyword">ON</span> posts(city, created_at DESC);</code>
+      </div>
+
+      <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Caching Strategy</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Layer</th><th>Method</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>CDN</td><td>Vercel Edge</td></tr>
+            <tr><td>API</td><td>React Query</td></tr>
+            <tr><td>Images</td><td>Supabase CDN</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Cost Estimation -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Infrastructure Cost Estimation</h2>
+      </div>
+
+      <div class="cost-grid">
+        <div class="cost-card">
+          <div class="cost-header">MVP (0-1,000 users)</div>
+          <div class="cost-content">
+            <div class="cost-item"><span>Vercel Pro</span><span>$20</span></div>
+            <div class="cost-item"><span>Supabase Free</span><span>$0</span></div>
+            <div class="cost-item"><span>Mapbox Free</span><span>$0</span></div>
+            <div class="cost-item"><span>Twilio</span><span>~$20</span></div>
+            <div class="cost-item"><span>Others Free</span><span>$0</span></div>
+          </div>
+          <div class="cost-total"><span>Total</span><span>~$40/month</span></div>
+        </div>
+
+        <div class="cost-card">
+          <div class="cost-header">Growth (1,000-10,000 users)</div>
+          <div class="cost-content">
+            <div class="cost-item"><span>Vercel Pro</span><span>$20</span></div>
+            <div class="cost-item"><span>Supabase Pro</span><span>$25</span></div>
+            <div class="cost-item"><span>Mapbox</span><span>~$50</span></div>
+            <div class="cost-item"><span>Twilio</span><span>~$50</span></div>
+            <div class="cost-item"><span>Sentry Team</span><span>$26</span></div>
+          </div>
+          <div class="cost-total"><span>Total</span><span>~$171/month</span></div>
+        </div>
+
+        <div class="cost-card">
+          <div class="cost-header">Scale (10,000-100,000 users)</div>
+          <div class="cost-content">
+            <div class="cost-item"><span>Vercel Team</span><span>$150</span></div>
+            <div class="cost-item"><span>Supabase Pro+</span><span>$100</span></div>
+            <div class="cost-item"><span>Mapbox</span><span>~$300</span></div>
+            <div class="cost-item"><span>All services</span><span>~$600</span></div>
+          </div>
+          <div class="cost-total"><span>Total</span><span>~$1,150/month</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Environment Variables -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Environment Variables</h2>
+      </div>
+
+      <div class="code-block">
+        <code><span class="comment"># Supabase</span>
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+<span class="comment"># Database</span>
+DATABASE_URL=
+
+<span class="comment"># Mapbox</span>
+NEXT_PUBLIC_MAPBOX_TOKEN=
+
+<span class="comment"># Services</span>
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+RESEND_API_KEY=</code>
+      </div>
+    </section>
+
+    <!-- Alternatives Considered -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Alternatives Considered</h2>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Selected</th><th>Alternatives</th><th>Reason</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Database</strong></td>
+              <td><span class="badge badge-green">Supabase</span></td>
+              <td>PlanetScale, MongoDB</td>
+              <td>All-in-one, PostGIS support</td>
+            </tr>
+            <tr>
+              <td><strong>Maps</strong></td>
+              <td><span class="badge badge-green">Mapbox</span></td>
+              <td>Google Maps</td>
+              <td>Best clustering, cheaper at scale</td>
+            </tr>
+            <tr>
+              <td><strong>Auth</strong></td>
+              <td><span class="badge badge-green">Supabase</span></td>
+              <td>Clerk, NextAuth</td>
+              <td>Integrated, phone auth support</td>
+            </tr>
+            <tr>
+              <td><strong>Hosting</strong></td>
+              <td><span class="badge badge-green">Vercel</span></td>
+              <td>Netlify, Railway</td>
+              <td>Best Next.js optimization</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p class="footer-text">Fleevigo Community Technical Specification | Prepared by Epic Growth | January 2025 | v1.0</p>
+  </footer>
+</body>
+</html>
