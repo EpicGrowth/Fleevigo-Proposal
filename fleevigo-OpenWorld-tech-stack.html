@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleevigo Community | Tech Stack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: oklch(0.85 0.18 85);
+      --primary-hover: oklch(0.80 0.18 85);
+      --primary-foreground: oklch(0.1 0.02 260);
+      --secondary: oklch(0.7 0.2 30);
+      --secondary-foreground: oklch(1 0 0);
+      --accent: oklch(0.92 0.08 85);
+      --background: oklch(0.98 0.01 90);
+      --foreground: oklch(0.15 0.02 260);
+      --card: oklch(1 0 0);
+      --muted: oklch(0.96 0.01 90);
+      --muted-foreground: oklch(0.45 0.02 260);
+      --border: oklch(0.9 0.02 90);
+      --radius: 0.75rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--foreground);
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .logo-text { font-weight: 900; font-size: 1.125rem; letter-spacing: -0.025em; }
+
+    .nav-links { display: flex; gap: 0.25rem; }
+
+    .nav-link {
+      padding: 0.5rem 1rem; border-radius: var(--radius);
+      text-decoration: none; color: var(--muted-foreground);
+      font-weight: 500; font-size: 0.875rem; transition: all 0.2s;
+    }
+
+    .nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 4rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(5%, 5%); }
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+      color: var(--primary-foreground); margin-bottom: 0.5rem; letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle { font-size: 1.125rem; color: var(--primary-foreground); opacity: 0.9; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section { margin-bottom: 3rem; }
+
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+    .section-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .section-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .section-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+
+    /* Architecture Diagram */
+    .arch-diagram {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem; overflow: hidden;
+    }
+
+    .arch-layers {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+
+    .arch-layer {
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .arch-layer-label {
+      width: 120px; flex-shrink: 0;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted-foreground);
+    }
+
+    .arch-layer-content {
+      flex: 1; display: flex; gap: 0.5rem; flex-wrap: wrap;
+    }
+
+    .arch-box {
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 0.75rem 1rem;
+      font-size: 0.875rem; font-weight: 500;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .arch-box:hover { border-color: var(--primary); background: var(--accent); }
+
+    .arch-box.primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--primary-foreground); border-color: transparent;
+    }
+
+    .arch-box.secondary {
+      background: var(--secondary); color: white; border-color: transparent;
+    }
+
+    .arch-connector {
+      display: flex; justify-content: center; padding: 0.5rem 0;
+    }
+
+    .arch-connector svg { width: 24px; height: 24px; color: var(--muted-foreground); }
+
+    /* Tech Stack Grid */
+    .stack-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem;
+    }
+
+    .stack-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .stack-card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+    .stack-header {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 1rem 1.25rem; background: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stack-icon {
+      width: 40px; height: 40px; border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; flex-shrink: 0;
+    }
+
+    .stack-icon.frontend { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+    .stack-icon.backend { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .stack-icon.database { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    .stack-icon.maps { background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); }
+    .stack-icon.auth { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+    .stack-icon.realtime { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+    .stack-icon.storage { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
+    .stack-icon.deploy { background: linear-gradient(135deg, #000000 0%, #374151 100%); }
+    .stack-icon.style { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); }
+    .stack-icon.state { background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); }
+
+    .stack-info { flex: 1; }
+    .stack-name { font-weight: 600; font-size: 1rem; }
+    .stack-tech { font-size: 0.75rem; color: var(--muted-foreground); }
+
+    .stack-body { padding: 1rem 1.25rem; }
+    .stack-desc { font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 0.75rem; }
+
+    .stack-features {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+
+    .stack-feature {
+      background: var(--accent); border: 1px solid var(--border);
+      padding: 0.25rem 0.5rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    /* Collapsible */
+    .collapsible {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-top: 0.75rem; overflow: hidden;
+    }
+
+    .collapsible-trigger {
+      width: 100%; background: var(--muted); border: none;
+      padding: 0.75rem 1rem; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted-foreground);
+      transition: all 0.2s;
+    }
+
+    .collapsible-trigger:hover { background: var(--accent); color: var(--foreground); }
+
+    .collapsible-trigger svg {
+      width: 16px; height: 16px; transition: transform 0.3s;
+    }
+
+    .collapsible-trigger.open svg { transform: rotate(180deg); }
+
+    .collapsible-content {
+      display: none; padding: 1rem; background: var(--card);
+      border-top: 1px solid var(--border); font-size: 0.875rem;
+    }
+
+    .collapsible-content.open { display: block; }
+
+    .detail-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    }
+
+    .detail-item { }
+    .detail-label { font-size: 0.75rem; color: var(--muted-foreground); margin-bottom: 0.25rem; }
+    .detail-value { font-weight: 500; }
+
+    .alt-badge {
+      display: inline-block; background: var(--muted); border: 1px solid var(--border);
+      padding: 0.125rem 0.5rem; border-radius: 9999px;
+      font-size: 0.75rem; margin-right: 0.25rem; margin-bottom: 0.25rem;
+    }
+
+    /* External Services */
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;
+    }
+
+    .service-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+      transition: all 0.3s;
+    }
+
+    .service-card:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+
+    .service-name { font-weight: 600; margin-bottom: 0.25rem; }
+    .service-purpose { font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 0.75rem; }
+    .service-usage { font-size: 0.75rem; color: var(--primary); font-weight: 500; }
+
+    /* Security & Performance */
+    .specs-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+
+    .specs-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+
+    .specs-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 1rem 1.25rem; color: var(--primary-foreground);
+      font-weight: 600;
+    }
+
+    .specs-content { padding: 1.25rem; }
+
+    .specs-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .specs-item:last-child { border-bottom: none; }
+    .specs-label { color: var(--muted-foreground); }
+    .specs-value { font-weight: 500; }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    .badge-green { background: rgba(34, 197, 94, 0.1); color: rgb(22, 163, 74); }
+    .badge-blue { background: rgba(59, 130, 246, 0.1); color: rgb(37, 99, 235); }
+    .badge-purple { background: rgba(139, 92, 246, 0.1); color: rgb(124, 58, 237); }
+
+    .footer {
+      background: var(--foreground); color: var(--background);
+      padding: 2rem 1.5rem; text-align: center; margin-top: 3rem;
+    }
+
+    .footer-text { font-size: 0.875rem; opacity: 0.8; }
+
+    .note-box {
+      background: var(--accent); border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem; border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 1.5rem; font-size: 0.875rem;
+    }
+
+    .note-box strong { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { gap: 0; }
+      .nav-link { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+      .hero { padding: 3rem 1rem; }
+      .container { padding: 2rem 1rem; }
+      .arch-layer { flex-direction: column; align-items: flex-start; }
+      .arch-layer-label { width: auto; margin-bottom: 0.5rem; }
+      .stack-grid { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="development-plan.html" class="logo">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="logo-text">Fleevigo Community</span>
+      </a>
+      <div class="nav-links">
+        <a href="development-plan.html" class="nav-link">Development</a>
+        <a href="financial-estimates.html" class="nav-link">Finance</a>
+        <a href="tech-stack.html" class="nav-link active">Tech Stack</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Technology Stack</h1>
+      <p class="hero-subtitle">Modern, Scalable Architecture for Location-Aware Social Platform</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Architecture Overview -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Architecture Overview</h2>
+      </div>
+      
+      <div class="arch-diagram">
+        <div class="arch-layers">
+          <div class="arch-layer">
+            <div class="arch-layer-label">Client Layer</div>
+            <div class="arch-layer-content">
+              <div class="arch-box primary">📱 PWA (Mobile + Desktop)</div>
+              <div class="arch-box">🌐 Web Browser</div>
+              <div class="arch-box">📲 Home Screen Install</div>
+            </div>
+          </div>
+          
+          <div class="arch-connector">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          
+          <div class="arch-layer">
+            <div class="arch-layer-label">Frontend</div>
+            <div class="arch-layer-content">
+              <div class="arch-box primary">⚛️ Next.js 14</div>
+              <div class="arch-box">🎨 React 18</div>
+              <div class="arch-box">💨 Tailwind CSS</div>
+              <div class="arch-box">🧩 shadcn/ui</div>
+            </div>
+          </div>
+          
+          <div class="arch-connector">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+            </svg>
+          </div>
+          
+          <div class="arch-layer">
+            <div class="arch-layer-label">Backend</div>
+            <div class="arch-layer-content">
+              <div class="arch-box secondary">🔥 Supabase</div>
+              <div class="arch-box">🔐 Auth</div>
+              <div class="arch-box">⚡ Realtime</div>
+              <div class="arch-box">📦 Storage</div>
+              <div class="arch-box">🔌 Edge Functions</div>
+            </div>
+          </div>
+          
+          <div class="arch-connector">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          
+          <div class="arch-layer">
+            <div class="arch-layer-label">Data Layer</div>
+            <div class="arch-layer-content">
+              <div class="arch-box primary">🐘 PostgreSQL + PostGIS</div>
+              <div class="arch-box">🗺️ Spatial Queries</div>
+              <div class="arch-box">🔒 Row Level Security</div>
+            </div>
+          </div>
+          
+          <div class="arch-connector">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
+          </div>
+          
+          <div class="arch-layer">
+            <div class="arch-layer-label">External</div>
+            <div class="arch-layer-content">
+              <div class="arch-box">🗺️ Mapbox/MapLibre</div>
+              <div class="arch-box">📍 Radar (Geofencing)</div>
+              <div class="arch-box">🔔 OneSignal</div>
+              <div class="arch-box">📱 Twilio</div>
+              <div class="arch-box">📧 Resend</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <strong>PWA-First Approach:</strong> Progressive Web App delivers native-like experience across iOS, Android, and desktop from a single codebase. Enables offline support, push notifications, and home screen installation without app store deployment.
+      </div>
+    </section>
+
+    <!-- Core Stack Components -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Core Stack Components</h2>
+      </div>
+
+      <div class="stack-grid">
+        <!-- Next.js -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon frontend">⚛️</div>
+            <div class="stack-info">
+              <div class="stack-name">Next.js 14</div>
+              <div class="stack-tech">React Framework</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Full-stack React framework with server-side rendering, API routes, and optimized performance out of the box.</p>
+            <div class="stack-features">
+              <span class="stack-feature">App Router</span>
+              <span class="stack-feature">Server Components</span>
+              <span class="stack-feature">API Routes</span>
+              <span class="stack-feature">Image Optimization</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Version</div><div class="detail-value">14.x (App Router)</div></div>
+                  <div class="detail-item"><div class="detail-label">Rendering</div><div class="detail-value">Hybrid SSR/SSG/CSR</div></div>
+                  <div class="detail-item"><div class="detail-label">TypeScript</div><div class="detail-value">Full support</div></div>
+                  <div class="detail-item"><div class="detail-label">Bundle Size</div><div class="detail-value">Auto code-splitting</div></div>
+                  <div class="detail-item"><div class="detail-label">PWA Plugin</div><div class="detail-value">next-pwa</div></div>
+                  <div class="detail-item"><div class="detail-label">Deployment</div><div class="detail-value">Vercel optimized</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Remix</span>
+                  <span class="alt-badge">Nuxt</span>
+                  <span class="alt-badge">SvelteKit</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supabase -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon backend">🔥</div>
+            <div class="stack-info">
+              <div class="stack-name">Supabase</div>
+              <div class="stack-tech">Backend as a Service</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Open-source Firebase alternative providing PostgreSQL database, authentication, realtime subscriptions, and storage.</p>
+            <div class="stack-features">
+              <span class="stack-feature">PostgreSQL</span>
+              <span class="stack-feature">Auth</span>
+              <span class="stack-feature">Realtime</span>
+              <span class="stack-feature">Storage</span>
+              <span class="stack-feature">Edge Functions</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Database</div><div class="detail-value">PostgreSQL 15+</div></div>
+                  <div class="detail-item"><div class="detail-label">Spatial</div><div class="detail-value">PostGIS extension</div></div>
+                  <div class="detail-item"><div class="detail-label">Auth Providers</div><div class="detail-value">Email, Phone, OAuth</div></div>
+                  <div class="detail-item"><div class="detail-label">Realtime</div><div class="detail-value">WebSocket channels</div></div>
+                  <div class="detail-item"><div class="detail-label">Security</div><div class="detail-value">Row Level Security</div></div>
+                  <div class="detail-item"><div class="detail-label">Functions</div><div class="detail-value">Deno Edge Functions</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Firebase</span>
+                  <span class="alt-badge">AWS Amplify</span>
+                  <span class="alt-badge">Custom Node.js</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maps -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon maps">🗺️</div>
+            <div class="stack-info">
+              <div class="stack-name">Mapbox + MapLibre</div>
+              <div class="stack-tech">Mapping Platform</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Hybrid mapping approach using Mapbox for premium features and MapLibre GL JS for cost-effective base maps with OpenStreetMap data.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Vector Tiles</span>
+              <span class="stack-feature">Custom Styling</span>
+              <span class="stack-feature">Clustering</span>
+              <span class="stack-feature">Offline Maps</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Base Maps</div><div class="detail-value">MapLibre GL JS</div></div>
+                  <div class="detail-item"><div class="detail-label">Tile Source</div><div class="detail-value">OpenStreetMap</div></div>
+                  <div class="detail-item"><div class="detail-label">Premium</div><div class="detail-value">Mapbox (50K free)</div></div>
+                  <div class="detail-item"><div class="detail-label">Geofencing</div><div class="detail-value">Radar.io</div></div>
+                  <div class="detail-item"><div class="detail-label">Kenya Coverage</div><div class="detail-value">OSM (informal areas)</div></div>
+                  <div class="detail-item"><div class="detail-label">Offline</div><div class="detail-value">Tile caching (Phase 2)</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Google Maps</span>
+                  <span class="alt-badge">HERE Maps</span>
+                  <span class="alt-badge">Leaflet</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tailwind CSS -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon style">🎨</div>
+            <div class="stack-info">
+              <div class="stack-name">Tailwind CSS + shadcn/ui</div>
+              <div class="stack-tech">Styling System</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Utility-first CSS framework paired with accessible, customizable component library for consistent, maintainable UI.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Utility Classes</span>
+              <span class="stack-feature">Radix Primitives</span>
+              <span class="stack-feature">Dark Mode</span>
+              <span class="stack-feature">Accessible</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Tailwind</div><div class="detail-value">v3.x</div></div>
+                  <div class="detail-item"><div class="detail-label">Components</div><div class="detail-value">shadcn/ui</div></div>
+                  <div class="detail-item"><div class="detail-label">Icons</div><div class="detail-value">Lucide React</div></div>
+                  <div class="detail-item"><div class="detail-label">Animations</div><div class="detail-value">Framer Motion</div></div>
+                  <div class="detail-item"><div class="detail-label">Color Space</div><div class="detail-value">OKLCH</div></div>
+                  <div class="detail-item"><div class="detail-label">Responsive</div><div class="detail-value">Mobile-first</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Chakra UI</span>
+                  <span class="alt-badge">MUI</span>
+                  <span class="alt-badge">Mantine</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State Management -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon state">🔄</div>
+            <div class="stack-info">
+              <div class="stack-name">Zustand + React Query</div>
+              <div class="stack-tech">State Management</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Lightweight client state with Zustand, server state caching and synchronization with TanStack Query for optimal data handling.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Client State</span>
+              <span class="stack-feature">Server Cache</span>
+              <span class="stack-feature">Optimistic Updates</span>
+              <span class="stack-feature">Background Sync</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Client State</div><div class="detail-value">Zustand</div></div>
+                  <div class="detail-item"><div class="detail-label">Server State</div><div class="detail-value">TanStack Query v5</div></div>
+                  <div class="detail-item"><div class="detail-label">Persistence</div><div class="detail-value">zustand/persist</div></div>
+                  <div class="detail-item"><div class="detail-label">DevTools</div><div class="detail-value">React Query Devtools</div></div>
+                  <div class="detail-item"><div class="detail-label">Bundle Impact</div><div class="detail-value">~3KB + ~12KB</div></div>
+                  <div class="detail-item"><div class="detail-label">SSR Support</div><div class="detail-value">Hydration ready</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Redux Toolkit</span>
+                  <span class="alt-badge">Jotai</span>
+                  <span class="alt-badge">SWR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authentication -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon auth">🔐</div>
+            <div class="stack-info">
+              <div class="stack-name">Supabase Auth</div>
+              <div class="stack-tech">Authentication</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Built-in authentication with email/password, phone OTP, and social providers. JWT tokens with automatic refresh.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Email/Password</span>
+              <span class="stack-feature">Phone OTP</span>
+              <span class="stack-feature">Google OAuth</span>
+              <span class="stack-feature">Session Management</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Primary</div><div class="detail-value">Email + Password</div></div>
+                  <div class="detail-item"><div class="detail-label">Secondary</div><div class="detail-value">Phone OTP (Kenya)</div></div>
+                  <div class="detail-item"><div class="detail-label">Social</div><div class="detail-value">Google OAuth</div></div>
+                  <div class="detail-item"><div class="detail-label">Tokens</div><div class="detail-value">JWT with refresh</div></div>
+                  <div class="detail-item"><div class="detail-label">MFA</div><div class="detail-value">Phase 2 (optional)</div></div>
+                  <div class="detail-item"><div class="detail-label">Session</div><div class="detail-value">7-day expiry</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Auth0</span>
+                  <span class="alt-badge">Clerk</span>
+                  <span class="alt-badge">NextAuth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Realtime -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon realtime">⚡</div>
+            <div class="stack-info">
+              <div class="stack-name">Supabase Realtime</div>
+              <div class="stack-tech">Live Updates</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">WebSocket-based realtime subscriptions for live location sharing, instant notifications, and collaborative features.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Presence</span>
+              <span class="stack-feature">Broadcast</span>
+              <span class="stack-feature">DB Changes</span>
+              <span class="stack-feature">Channels</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Protocol</div><div class="detail-value">WebSocket</div></div>
+                  <div class="detail-item"><div class="detail-label">Presence</div><div class="detail-value">"Who's Around"</div></div>
+                  <div class="detail-item"><div class="detail-label">Broadcast</div><div class="detail-value">SOS alerts</div></div>
+                  <div class="detail-item"><div class="detail-label">DB Listen</div><div class="detail-value">Posts, pins updates</div></div>
+                  <div class="detail-item"><div class="detail-label">Channels</div><div class="detail-value">City-based rooms</div></div>
+                  <div class="detail-item"><div class="detail-label">Reconnection</div><div class="detail-value">Auto with backoff</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Pusher</span>
+                  <span class="alt-badge">Ably</span>
+                  <span class="alt-badge">Socket.io</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Storage -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon storage">📦</div>
+            <div class="stack-info">
+              <div class="stack-name">Supabase Storage</div>
+              <div class="stack-tech">File Storage</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">S3-compatible object storage for user avatars, post images, and media content with automatic image transformations.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Image Transforms</span>
+              <span class="stack-feature">CDN</span>
+              <span class="stack-feature">Access Control</span>
+              <span class="stack-feature">Resumable Uploads</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Buckets</div><div class="detail-value">avatars, posts, media</div></div>
+                  <div class="detail-item"><div class="detail-label">Max Size</div><div class="detail-value">10MB per file</div></div>
+                  <div class="detail-item"><div class="detail-label">Transforms</div><div class="detail-value">Resize, crop, format</div></div>
+                  <div class="detail-item"><div class="detail-label">CDN</div><div class="detail-value">Global edge caching</div></div>
+                  <div class="detail-item"><div class="detail-label">Security</div><div class="detail-value">RLS policies</div></div>
+                  <div class="detail-item"><div class="detail-label">Formats</div><div class="detail-value">WebP auto-convert</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Cloudinary</span>
+                  <span class="alt-badge">AWS S3</span>
+                  <span class="alt-badge">Uploadthing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deployment -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon deploy">🚀</div>
+            <div class="stack-info">
+              <div class="stack-name">Vercel</div>
+              <div class="stack-tech">Deployment Platform</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Edge-optimized deployment platform with automatic CI/CD, preview deployments, and global CDN for Next.js applications.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Edge Network</span>
+              <span class="stack-feature">Auto CI/CD</span>
+              <span class="stack-feature">Preview Deploys</span>
+              <span class="stack-feature">Analytics</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Plan</div><div class="detail-value">Pro</div></div>
+                  <div class="detail-item"><div class="detail-label">Regions</div><div class="detail-value">EU (Malta), Africa</div></div>
+                  <div class="detail-item"><div class="detail-label">SSL</div><div class="detail-value">Auto-provisioned</div></div>
+                  <div class="detail-item"><div class="detail-label">CI/CD</div><div class="detail-value">GitHub integration</div></div>
+                  <div class="detail-item"><div class="detail-label">Previews</div><div class="detail-value">Per PR/branch</div></div>
+                  <div class="detail-item"><div class="detail-label">Rollback</div><div class="detail-value">Instant</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">Netlify</span>
+                  <span class="alt-badge">Railway</span>
+                  <span class="alt-badge">AWS Amplify</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Database -->
+        <div class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon database">🐘</div>
+            <div class="stack-info">
+              <div class="stack-name">PostgreSQL + PostGIS</div>
+              <div class="stack-tech">Spatial Database</div>
+            </div>
+          </div>
+          <div class="stack-body">
+            <p class="stack-desc">Enterprise-grade relational database with PostGIS extension for geospatial queries, proximity searches, and location indexing.</p>
+            <div class="stack-features">
+              <span class="stack-feature">Spatial Indexes</span>
+              <span class="stack-feature">Proximity Search</span>
+              <span class="stack-feature">Geofencing</span>
+              <span class="stack-feature">JSONB</span>
+            </div>
+            <div class="collapsible">
+              <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                Technical Details
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="collapsible-content">
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="detail-label">Version</div><div class="detail-value">PostgreSQL 15+</div></div>
+                  <div class="detail-item"><div class="detail-label">Extension</div><div class="detail-value">PostGIS 3.x</div></div>
+                  <div class="detail-item"><div class="detail-label">Geometry</div><div class="detail-value">POINT, POLYGON</div></div>
+                  <div class="detail-item"><div class="detail-label">Index</div><div class="detail-value">GiST spatial</div></div>
+                  <div class="detail-item"><div class="detail-label">Query</div><div class="detail-value">ST_DWithin, ST_Distance</div></div>
+                  <div class="detail-item"><div class="detail-label">SRID</div><div class="detail-value">4326 (WGS84)</div></div>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                  <div class="detail-label">Alternatives Considered</div>
+                  <span class="alt-badge">MongoDB + GeoJSON</span>
+                  <span class="alt-badge">MySQL Spatial</span>
+                  <span class="alt-badge">CockroachDB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- External Services -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+          </svg>
+        </div>
+        <h2 class="section-title">External Services</h2>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-name">🔔 OneSignal</div>
+          <div class="service-purpose">Push notifications for engagement, alerts, and SOS broadcasts</div>
+          <div class="service-usage">Free tier: 10K subscribers</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📱 Twilio</div>
+          <div class="service-purpose">SMS fallback for SOS alerts when push unavailable</div>
+          <div class="service-usage">Pay-per-use: ~€0.05/SMS</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📧 Resend</div>
+          <div class="service-purpose">Transactional emails for auth, notifications, reports</div>
+          <div class="service-usage">Free tier: 3K emails/month</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📍 Radar.io</div>
+          <div class="service-purpose">Geofencing for city detection and zone-based triggers</div>
+          <div class="service-usage">Free tier: 100K API calls/month</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">🐛 Sentry</div>
+          <div class="service-purpose">Error tracking, performance monitoring, crash reporting</div>
+          <div class="service-usage">Free tier: 5K errors/month</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📊 Mixpanel</div>
+          <div class="service-purpose">Product analytics, user behavior, engagement metrics</div>
+          <div class="service-usage">Free tier: 20M events/month</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security & Performance -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Security & Performance</h2>
+      </div>
+
+      <div class="specs-grid">
+        <div class="specs-card">
+          <div class="specs-header">🔒 Security Specifications</div>
+          <div class="specs-content">
+            <div class="specs-item">
+              <span class="specs-label">Data Encryption</span>
+              <span class="specs-value">AES-256 at rest, TLS 1.3 in transit</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Authentication</span>
+              <span class="specs-value">JWT + Refresh tokens</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Database Security</span>
+              <span class="specs-value">Row Level Security (RLS)</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">API Protection</span>
+              <span class="specs-value">Rate limiting, CORS</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Content Moderation</span>
+              <span class="specs-value">AI-assisted + manual review</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Compliance</span>
+              <span class="specs-value">GDPR-ready architecture</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="specs-card">
+          <div class="specs-header">⚡ Performance Targets</div>
+          <div class="specs-content">
+            <div class="specs-item">
+              <span class="specs-label">Initial Load</span>
+              <span class="specs-value"><span class="badge badge-green">&lt;3 seconds</span></span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Time to Interactive</span>
+              <span class="specs-value"><span class="badge badge-green">&lt;5 seconds</span></span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Realtime Updates</span>
+              <span class="specs-value"><span class="badge badge-blue">&lt;500ms</span></span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Map Pin Updates</span>
+              <span class="specs-value"><span class="badge badge-blue">&lt;2 seconds</span></span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">SOS Alert Delivery</span>
+              <span class="specs-value"><span class="badge badge-purple">&lt;3 seconds</span></span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">API Uptime</span>
+              <span class="specs-value"><span class="badge badge-green">99.9%</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="specs-card">
+          <div class="specs-header">📱 PWA Capabilities</div>
+          <div class="specs-content">
+            <div class="specs-item">
+              <span class="specs-label">Install Prompt</span>
+              <span class="specs-value">iOS + Android</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Offline Mode</span>
+              <span class="specs-value">Phase 2 (cached content)</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Push Notifications</span>
+              <span class="specs-value">Full support</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Background Sync</span>
+              <span class="specs-value">Queued actions</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Geolocation</span>
+              <span class="specs-value">Foreground tracking</span>
+            </div>
+            <div class="specs-item">
+              <span class="specs-label">Camera Access</span>
+              <span class="specs-value">Photo capture</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <strong>Background Location Note:</strong> PWAs have limited background location capabilities. Phase 1 uses foreground tracking with user consent. Native app wrappers (Phase 2) enable continuous background tracking for "Who's Around" feature.
+      </div>
+    </section>
+
+    <!-- Development Tools -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Development Tools</h2>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-name">📝 TypeScript</div>
+          <div class="service-purpose">Type-safe JavaScript for better DX and fewer bugs</div>
+          <div class="service-usage">Strict mode enabled</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">🧪 Vitest + Playwright</div>
+          <div class="service-purpose">Unit testing and E2E testing framework</div>
+          <div class="service-usage">CI/CD integrated</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📋 ESLint + Prettier</div>
+          <div class="service-purpose">Code linting and formatting standards</div>
+          <div class="service-usage">Pre-commit hooks</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">🔄 GitHub Actions</div>
+          <div class="service-purpose">Automated testing, linting, and deployment</div>
+          <div class="service-usage">PR checks + deploy</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">📚 Storybook</div>
+          <div class="service-purpose">Component documentation and visual testing</div>
+          <div class="service-usage">UI component library</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">🤖 Claude Code</div>
+          <div class="service-purpose">AI-assisted development acceleration</div>
+          <div class="service-usage">Development workflow</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p class="footer-text">Fleevigo Community Technical Proposal &nbsp;|&nbsp; Prepared by Epic Growth &nbsp;|&nbsp; January 2025 &nbsp;|&nbsp; v1.0</p>
+  </footer>
+
+  <script>
+    function toggleCollapsible(trigger) {
+      trigger.classList.toggle('open');
+      const content = trigger.nextElementSibling;
+      content.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

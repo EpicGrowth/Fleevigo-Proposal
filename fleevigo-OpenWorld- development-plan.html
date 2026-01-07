@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleevigo Community | Development Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: oklch(0.85 0.18 85);
+      --primary-hover: oklch(0.80 0.18 85);
+      --primary-foreground: oklch(0.1 0.02 260);
+      --secondary: oklch(0.7 0.2 30);
+      --secondary-foreground: oklch(1 0 0);
+      --accent: oklch(0.92 0.08 85);
+      --background: oklch(0.98 0.01 90);
+      --foreground: oklch(0.15 0.02 260);
+      --card: oklch(1 0 0);
+      --muted: oklch(0.96 0.01 90);
+      --muted-foreground: oklch(0.45 0.02 260);
+      --border: oklch(0.9 0.02 90);
+      --radius: 0.75rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--foreground);
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .logo-text { font-weight: 900; font-size: 1.125rem; letter-spacing: -0.025em; }
+
+    .nav-links { display: flex; gap: 0.25rem; }
+
+    .nav-link {
+      padding: 0.5rem 1rem; border-radius: var(--radius);
+      text-decoration: none; color: var(--muted-foreground);
+      font-weight: 500; font-size: 0.875rem; transition: all 0.2s;
+    }
+
+    .nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 4rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(5%, 5%); }
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+      color: var(--primary-foreground); margin-bottom: 0.5rem; letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle { font-size: 1.125rem; color: var(--primary-foreground); opacity: 0.9; }
+
+    .hero-meta { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
+    .hero-meta-item { text-align: center; }
+    .hero-meta-value { font-size: 1.5rem; font-weight: 700; color: var(--primary-foreground); }
+    .hero-meta-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-foreground); opacity: 0.8; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section { margin-bottom: 3rem; }
+
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+    .section-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .section-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .section-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow); transition: all 0.3s;
+    }
+
+    .card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+    .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+    .snapshot-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem; text-align: center;
+    }
+
+    .snapshot-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.25rem; }
+    .snapshot-value { font-size: 1.125rem; font-weight: 600; color: var(--foreground); }
+
+    .collapsible {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 0.75rem; overflow: hidden;
+    }
+
+    .collapsible-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem; background: none; border: none; cursor: pointer;
+      font-family: inherit; text-align: left; transition: background 0.2s;
+    }
+
+    .collapsible-trigger:hover { background: var(--muted); }
+    .collapsible-header { display: flex; align-items: center; gap: 0.75rem; }
+
+    .collapsible-icon {
+      width: 32px; height: 32px; background: var(--accent); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .collapsible-icon svg { width: 16px; height: 16px; color: var(--primary); }
+    .collapsible-title { font-weight: 600; color: var(--foreground); }
+    .collapsible-meta { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .collapsible-chevron {
+      width: 20px; height: 20px; color: var(--muted-foreground);
+      transition: transform 0.2s; flex-shrink: 0;
+    }
+
+    .collapsible.open .collapsible-chevron { transform: rotate(180deg); }
+
+    .collapsible-content {
+      display: none; padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border);
+    }
+
+    .collapsible.open .collapsible-content { display: block; }
+
+    .table-wrapper { overflow-x: auto; margin-top: 1rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 600; background: var(--muted); color: var(--foreground); }
+    tr:hover { background: var(--muted); }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500; margin-left: 0.5rem;
+    }
+
+    .badge-critical { background: rgba(239, 68, 68, 0.1); color: rgb(220, 38, 38); }
+    .badge-high { background: rgba(251, 146, 60, 0.1); color: rgb(234, 88, 12); }
+    .badge-medium { background: rgba(34, 197, 94, 0.1); color: rgb(22, 163, 74); }
+
+    .timeline {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem; margin-top: 1.5rem;
+    }
+
+    .timeline-header {
+      display: flex; justify-content: space-between; margin-bottom: 1rem;
+      font-size: 0.75rem; color: var(--muted-foreground);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .timeline-bar {
+      position: relative; height: 48px; background: var(--muted);
+      border-radius: 8px; overflow: hidden;
+    }
+
+    .timeline-phase {
+      position: absolute; top: 4px; bottom: 4px; border-radius: 6px;
+      display: flex; align-items: center; padding: 0 0.75rem;
+      font-size: 0.75rem; font-weight: 600; color: white;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .timeline-phase-1 {
+      left: 0; width: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, oklch(0.78 0.18 70) 100%);
+      color: var(--primary-foreground);
+    }
+
+    .timeline-phase-2 {
+      left: 50%; width: 50%;
+      background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);
+    }
+
+    .timeline-months {
+      display: flex; justify-content: space-between; margin-top: 0.5rem;
+      font-size: 0.6875rem; color: var(--muted-foreground);
+    }
+
+    .milestones { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+
+    .milestone {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+      position: relative; overflow: hidden;
+    }
+
+    .milestone::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+
+    .milestone-label { font-size: 0.75rem; font-weight: 600; color: var(--primary); margin-bottom: 0.25rem; }
+    .milestone-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .milestone-target { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .feature-list { margin-top: 1rem; }
+
+    .feature-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+    }
+
+    .feature-item:last-child { border-bottom: none; }
+
+    .feature-check {
+      width: 20px; height: 20px; background: var(--accent);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 2px;
+    }
+
+    .feature-check svg { width: 12px; height: 12px; color: var(--primary); }
+    .feature-name { font-weight: 500; }
+    .feature-desc { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .specialist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+
+    .specialist-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+    }
+
+    .specialist-role { font-weight: 600; margin-bottom: 0.25rem; }
+    .specialist-purpose { font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+    .specialist-timing { font-size: 0.75rem; color: var(--primary); font-weight: 500; }
+
+    .deliverables { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .deliverables-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+    .deliverables-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .deliverable-tag {
+      background: var(--accent); color: var(--primary-foreground);
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    .phase-divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0; }
+    .phase-divider::before, .phase-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .phase-badge {
+      background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);
+      color: white; padding: 0.5rem 1.5rem; border-radius: 9999px;
+      font-weight: 600; font-size: 0.875rem;
+    }
+
+    .key-dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+
+    .key-date {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem; text-align: center;
+    }
+
+    .key-date-month { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); }
+    .key-date-event { font-weight: 600; margin-top: 0.25rem; }
+
+    .footer {
+      background: var(--foreground); color: var(--background);
+      padding: 2rem 1.5rem; text-align: center; margin-top: 3rem;
+    }
+
+    .footer-text { font-size: 0.875rem; opacity: 0.8; }
+
+    @media (max-width: 768px) {
+      .nav-links { gap: 0; }
+      .nav-link { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+      .hero { padding: 3rem 1rem; }
+      .hero-meta { gap: 1rem; }
+      .container { padding: 2rem 1rem; }
+      .timeline-phase { font-size: 0.625rem; padding: 0 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="development-plan.html" class="logo">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="logo-text">Fleevigo Community</span>
+      </a>
+      <div class="nav-links">
+        <a href="development-plan.html" class="nav-link active">Development</a>
+        <a href="financial-estimates.html" class="nav-link">Finance</a>
+        <a href="tech-stack.html" class="nav-link">Tech Stack</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Development Plan</h1>
+      <p class="hero-subtitle">Phased Strategy for Fleevigo Community Platform</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">PWA</div>
+          <div class="hero-meta-label">Platform Type</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">Malta & Kenya</div>
+          <div class="hero-meta-label">Target Markets</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">10-12 Months</div>
+          <div class="hero-meta-label">Total Duration</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">Q2 2026</div>
+          <div class="hero-meta-label">MVP Launch</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Project Snapshot</h2>
+      </div>
+      <div class="snapshot-grid">
+        <div class="snapshot-card">
+          <div class="snapshot-label">Development Approach</div>
+          <div class="snapshot-value">AI-Assisted + Expert Audits</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-label">Methodology</div>
+          <div class="snapshot-value">Agile (2-week sprints)</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-label">Phase 1 Duration</div>
+          <div class="snapshot-value">6 months</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-label">Phase 2 Duration</div>
+          <div class="snapshot-value">4-6 months</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Project Timeline 2026</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-header">
+          <span>Development Kickoff</span>
+          <span>Phase 2 Complete</span>
+        </div>
+        <div class="timeline-bar">
+          <div class="timeline-phase timeline-phase-1">Phase 1: Core Platform</div>
+          <div class="timeline-phase timeline-phase-2">Phase 2: Growth</div>
+        </div>
+        <div class="timeline-months">
+          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+          <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Phase 1: Core Platform</h2>
+      </div>
+      <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        <strong>Duration:</strong> 6 months (23 weeks) &nbsp;|&nbsp; 
+        <strong>Objective:</strong> Deliver fully functional, audited MVP ready for market launch in Malta and Kenya
+      </p>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Milestones</h3>
+      <div class="milestones">
+        <div class="milestone">
+          <div class="milestone-label">M1</div>
+          <div class="milestone-title">Foundation Complete</div>
+          <div class="milestone-target">Week 2 — Setup, architecture, auth system</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M2</div>
+          <div class="milestone-title">Core Features</div>
+          <div class="milestone-target">Week 9 — Map, feed, pins, keyword engine</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M3</div>
+          <div class="milestone-title">Social & Safety</div>
+          <div class="milestone-target">Week 14 — Messaging, Who's Around, SOS</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M4</div>
+          <div class="milestone-title">Launch Ready</div>
+          <div class="milestone-target">Week 23 — Testing, deployment, docs</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin: 2rem 0 1rem;">Feature Scope (14 Features)</h3>
+
+      <div class="collapsible open">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Authentication & Profiles</div>
+              <div class="collapsible-meta">2 features • Critical priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">User Authentication<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Signup, login, password reset, session management</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">User Profiles<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Creation, editing, reputation display, badges</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Map & Location</div>
+              <div class="collapsible-meta">4 features • Critical/High priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Real-Time Map<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Interactive map with location tracking, pin display, filtering</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Dynamic Pin System<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Automatic pin generation from posts via keyword detection</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Map Search<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Keyword search functionality within map interface</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">City Detection<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Automatic location recognition, content localization</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Community & Social</div>
+              <div class="collapsible-meta">3 features • Critical/High priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Community Feed<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Post creation, media upload, likes, comments, hashtags</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Keyword Detection Engine<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Automatic categorization (traffic, safety, amenities, deals)</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Basic Moderation<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Content reporting, user blocking, admin flags</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Communication</div>
+              <div class="collapsible-meta">3 features • High priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Who's Around<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Opt-in live user locations with proximity indicators</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Direct Messaging<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Private user-to-user messaging with notifications</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Push Notifications<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Alerts for messages, nearby activity, emergencies</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Safety Features</div>
+              <div class="collapsible-meta">1 feature • Critical — Key Differentiator</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">SOS Safety System<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">One-tap emergency broadcast to nearby users — no competitor offers this</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Gamification</div>
+              <div class="collapsible-meta">1 feature • Medium priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Basic Gamification<span class="badge badge-medium">Medium</span></div>
+                <div class="feature-desc">Points system, badges, city leaderboards</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin: 2rem 0 1rem;">Development Schedule (23 weeks)</h3>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Foundation & Infrastructure</div>
+              <div class="collapsible-meta">Weeks 1-2 • 2 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Project Setup</td><td>Next.js scaffolding, TypeScript config, CI/CD pipeline</td></tr>
+                <tr><td>Database Architecture</td><td>PostgreSQL schema, PostGIS setup, Prisma ORM configuration</td></tr>
+                <tr><td>Authentication System</td><td>Supabase Auth integration, JWT handling, session management</td></tr>
+                <tr><td>API Foundation</td><td>Route structure, middleware, error handling, validation (Zod)</td></tr>
+                <tr><td>Real-Time Infrastructure</td><td>Supabase Realtime channels, WebSocket handling</td></tr>
+                <tr><td>File Storage Setup</td><td>Supabase Storage buckets, upload handling, CDN configuration</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Dev environment configured</span>
+              <span class="deliverable-tag">Database schema implemented</span>
+              <span class="deliverable-tag">Auth flows functional</span>
+              <span class="deliverable-tag">API architecture established</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Map & Location Features</div>
+              <div class="collapsible-meta">Weeks 3-6 • 4 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Map Integration</td><td>Mapbox GL JS setup, custom styling, controls</td></tr>
+                <tr><td>Pin System</td><td>Pin rendering, clustering, filtering, interactions</td></tr>
+                <tr><td>Map Search</td><td>Keyword search implementation, results display</td></tr>
+                <tr><td>Location Tracking</td><td>GPS integration, accuracy handling, permissions</td></tr>
+                <tr><td>City Detection</td><td>Boundary detection, city transitions, notifications</td></tr>
+                <tr><td>Geo-Queries</td><td>PostGIS proximity queries, spatial indexing</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Interactive map with custom styling</span>
+              <span class="deliverable-tag">Pin display with clustering</span>
+              <span class="deliverable-tag">Search functionality on map</span>
+              <span class="deliverable-tag">City detection system active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Community & Social Features</div>
+              <div class="collapsible-meta">Weeks 7-9 • 3 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Community Feed</td><td>Feed UI, infinite scroll, pull-to-refresh</td></tr>
+                <tr><td>Post Creation</td><td>Text/media composer, location tagging, validation</td></tr>
+                <tr><td>Media Handling</td><td>Image upload, optimization, gallery display</td></tr>
+                <tr><td>Keyword Detection Engine</td><td>Content analysis, category mapping, automatic pin generation</td></tr>
+                <tr><td>Engagement System</td><td>Likes, comments, hashtags, search</td></tr>
+                <tr><td>User Profiles</td><td>Profile pages, editing, public view, badges display</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Fully functional community feed</span>
+              <span class="deliverable-tag">Post creation with media support</span>
+              <span class="deliverable-tag">Keyword-to-pin automation</span>
+              <span class="deliverable-tag">User profiles with reputation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Communication Features</div>
+              <div class="collapsible-meta">Weeks 10-12 • 3 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Who's Around</td><td>Presence system, opt-in toggle, proximity display</td></tr>
+                <tr><td>Direct Messaging</td><td>Conversation UI, real-time delivery, read receipts</td></tr>
+                <tr><td>Push Notifications</td><td>OneSignal integration, notification handling</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Live user location sharing (opt-in)</span>
+              <span class="deliverable-tag">Real-time private messaging</span>
+              <span class="deliverable-tag">Push notification system active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Safety Features (SOS)</div>
+              <div class="collapsible-meta">Weeks 13-14 • 2 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>SOS Button</td><td>UI component, always-accessible placement</td></tr>
+                <tr><td>Alert Broadcasting</td><td>Real-time broadcast to nearby users, radius logic</td></tr>
+                <tr><td>Alert Management</td><td>Acknowledgments, status tracking, resolution</td></tr>
+                <tr><td>SMS Fallback</td><td>Twilio integration for critical alerts</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">One-tap SOS functionality</span>
+              <span class="deliverable-tag">Broadcast to nearby users</span>
+              <span class="deliverable-tag">SMS fallback for emergencies</span>
+              <span class="deliverable-tag">Alert lifecycle management</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Gamification</div>
+              <div class="collapsible-meta">Weeks 15-17 • 3 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Points System</td><td>Points allocation logic, balance tracking</td></tr>
+                <tr><td>Badges</td><td>Achievement definitions, unlock logic, display</td></tr>
+                <tr><td>Leaderboards</td><td>City-based rankings, calculation, caching</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Points awarded for user actions</span>
+              <span class="deliverable-tag">Badge system with achievements</span>
+              <span class="deliverable-tag">City leaderboards functional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">UI/UX Implementation</div>
+              <div class="collapsible-meta">Weeks 18-19 • 2 weeks (parallel)</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Design System</td><td>Component library, Tailwind theme, shadcn/ui setup</td></tr>
+                <tr><td>Responsive Layouts</td><td>Mobile-first design, breakpoint handling</td></tr>
+                <tr><td>PWA Configuration</td><td>Service worker, manifest, install prompts</td></tr>
+                <tr><td>Accessibility</td><td>ARIA labels, keyboard navigation, screen reader support</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Consistent design system</span>
+              <span class="deliverable-tag">Mobile-optimized layouts</span>
+              <span class="deliverable-tag">PWA installable</span>
+              <span class="deliverable-tag">Accessibility standards met</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Testing, Deployment & Documentation</div>
+              <div class="collapsible-meta">Weeks 20-23 • 4 weeks</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Component</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>Unit Testing</td><td>Component and function tests</td></tr>
+                <tr><td>Integration Testing</td><td>API and database tests</td></tr>
+                <tr><td>E2E Testing</td><td>Critical user flows (Playwright)</td></tr>
+                <tr><td>Performance Testing</td><td>Load testing, optimization</td></tr>
+                <tr><td>Production Deployment</td><td>Vercel setup, environment config, domains</td></tr>
+                <tr><td>Monitoring Setup</td><td>Sentry, analytics, alerting</td></tr>
+                <tr><td>Technical Documentation</td><td>API docs, deployment guide, architecture docs</td></tr>
+                <tr><td>User Documentation</td><td>End-user guide, FAQ</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="deliverables">
+            <div class="deliverables-title">Deliverables</div>
+            <div class="deliverables-list">
+              <span class="deliverable-tag">Comprehensive test coverage</span>
+              <span class="deliverable-tag">Production environment live</span>
+              <span class="deliverable-tag">Monitoring configured</span>
+              <span class="deliverable-tag">Documentation complete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin: 2rem 0 1rem;">Specialist Requirements</h3>
+      <div class="specialist-grid">
+        <div class="specialist-card">
+          <div class="specialist-role">Security Auditor</div>
+          <div class="specialist-purpose">Pre-launch security audit, penetration testing</div>
+          <div class="specialist-timing">End of Phase 1</div>
+        </div>
+        <div class="specialist-card">
+          <div class="specialist-role">DevOps Consultant</div>
+          <div class="specialist-purpose">Infrastructure review, scaling verification</div>
+          <div class="specialist-timing">Mid-Phase 1</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 2rem; background: var(--accent); border-color: var(--primary);">
+        <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Phase 1 Gate Criteria</h4>
+        <p style="font-size: 0.875rem; color: var(--muted-foreground);">
+          Fully functional platform, security audit passed, performance targets met, 500 user capacity verified
+        </p>
+      </div>
+    </section>
+
+    <div class="phase-divider"><span class="phase-badge">Phase 2</span></div>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Phase 2: Growth & Expansion</h2>
+      </div>
+      <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        <strong>Duration:</strong> 4-6 months &nbsp;|&nbsp; 
+        <strong>Objective:</strong> Scale platform capabilities based on user feedback, add merchant ecosystem, and prepare for native apps
+      </p>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Milestones</h3>
+      <div class="milestones">
+        <div class="milestone">
+          <div class="milestone-label">M5</div>
+          <div class="milestone-title">UX & Research</div>
+          <div class="milestone-target">Month 2 — Research complete, improvements deployed</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M6</div>
+          <div class="milestone-title">Merchant Live</div>
+          <div class="milestone-target">Month 3 — Merchant platform launched</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M7</div>
+          <div class="milestone-title">Admin & Integrations</div>
+          <div class="milestone-target">Month 5 — Dashboard, local integrations active</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-label">M8</div>
+          <div class="milestone-title">Phase 2 Complete</div>
+          <div class="milestone-target">Month 6 — Offline, optimization, native prep</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin: 2rem 0 1rem;">Feature Scope (11 Features)</h3>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">UX Research & Optimization</div>
+              <div class="collapsible-meta">2 features • Critical priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">UX Research<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">User interviews, usability testing, analytics review</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">UX Optimization<span class="badge badge-critical">Critical</span></div>
+                <div class="feature-desc">Interface improvements based on research findings</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Merchant Platform</div>
+              <div class="collapsible-meta">3 features • High/Medium priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Merchant Platform<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Business accounts, deal creation, dashboard</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Merchant Geo-Targeting<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Location-based promotion targeting</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Merchant Analytics<span class="badge badge-medium">Medium</span></div>
+                <div class="feature-desc">Views, clicks, redemption tracking</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Admin & Local Integrations</div>
+              <div class="collapsible-meta">3 features • High priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Advanced Admin Dashboard<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">User management, content moderation, analytics</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Local Integrations (Malta)<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Local payment methods, service integrations</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Local Integrations (Kenya)<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">M-Pesa integration, local services</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+          <div class="collapsible-header">
+            <div class="collapsible-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"/>
+              </svg>
+            </div>
+            <div>
+              <div class="collapsible-title">Offline & Native Prep</div>
+              <div class="collapsible-meta">3 features • Medium/High priority</div>
+            </div>
+          </div>
+          <svg class="collapsible-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="collapsible-content">
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Offline Support<span class="badge badge-medium">Medium</span></div>
+                <div class="feature-desc">Core functionality in low/no connectivity</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Performance Optimization<span class="badge badge-high">High</span></div>
+                <div class="feature-desc">Based on real-world usage patterns</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-check"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+              <div>
+                <div class="feature-name">Native App Preparation<span class="badge badge-medium">Medium</span></div>
+                <div class="feature-desc">Architecture planning, API optimization</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1rem; font-weight: 600; margin: 2rem 0 1rem;">Specialist Requirements</h3>
+      <div class="specialist-grid">
+        <div class="specialist-card">
+          <div class="specialist-role">UX Researcher</div>
+          <div class="specialist-purpose">User interviews, usability testing facilitation</div>
+          <div class="specialist-timing">Start of Phase 2</div>
+        </div>
+        <div class="specialist-card">
+          <div class="specialist-role">Payment Integration Specialist</div>
+          <div class="specialist-purpose">M-Pesa and local payment implementation</div>
+          <div class="specialist-timing">Local Integrations period</div>
+        </div>
+        <div class="specialist-card">
+          <div class="specialist-role">Security Auditor</div>
+          <div class="specialist-purpose">Post-merchant launch security review</div>
+          <div class="specialist-timing">End of Phase 2</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 2rem; background: var(--accent); border-color: var(--secondary);">
+        <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Phase 2 Gate Criteria</h4>
+        <p style="font-size: 0.875rem; color: var(--muted-foreground);">
+          Merchant ecosystem live, local integrations active, 5,000+ user capacity verified
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Key Dates</h2>
+      </div>
+      <div class="key-dates">
+        <div class="key-date">
+          <div class="key-date-month">January 2026</div>
+          <div class="key-date-event">Development Kickoff</div>
+        </div>
+        <div class="key-date">
+          <div class="key-date-month">March 2026</div>
+          <div class="key-date-event">Alpha Release (Internal)</div>
+        </div>
+        <div class="key-date">
+          <div class="key-date-month">May 2026</div>
+          <div class="key-date-event">Beta Release (Limited)</div>
+        </div>
+        <div class="key-date">
+          <div class="key-date-month">June 2026</div>
+          <div class="key-date-event">Phase 1 MVP Launch</div>
+        </div>
+        <div class="key-date">
+          <div class="key-date-month">July 2026</div>
+          <div class="key-date-event">Phase 2 / UX Research</div>
+        </div>
+        <div class="key-date">
+          <div class="key-date-month">Oct-Dec 2026</div>
+          <div class="key-date-event">Phase 2 Complete</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p class="footer-text">Fleevigo Community Development Proposal &nbsp;|&nbsp; Prepared by Epic Growth &nbsp;|&nbsp; January 2025 &nbsp;|&nbsp; v1.0</p>
+  </footer>
+
+  <script>
+    function toggleCollapsible(trigger) {
+      const collapsible = trigger.closest('.collapsible');
+      collapsible.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

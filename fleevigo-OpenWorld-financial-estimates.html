@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleevigo Community | Financial Estimates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: oklch(0.85 0.18 85);
+      --primary-hover: oklch(0.80 0.18 85);
+      --primary-foreground: oklch(0.1 0.02 260);
+      --secondary: oklch(0.7 0.2 30);
+      --secondary-foreground: oklch(1 0 0);
+      --accent: oklch(0.92 0.08 85);
+      --background: oklch(0.98 0.01 90);
+      --foreground: oklch(0.15 0.02 260);
+      --card: oklch(1 0 0);
+      --muted: oklch(0.96 0.01 90);
+      --muted-foreground: oklch(0.45 0.02 260);
+      --border: oklch(0.9 0.02 90);
+      --radius: 0.75rem;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--foreground);
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .logo-text { font-weight: 900; font-size: 1.125rem; letter-spacing: -0.025em; }
+
+    .nav-links { display: flex; gap: 0.25rem; }
+
+    .nav-link {
+      padding: 0.5rem 1rem; border-radius: var(--radius);
+      text-decoration: none; color: var(--muted-foreground);
+      font-weight: 500; font-size: 0.875rem; transition: all 0.2s;
+    }
+
+    .nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 4rem 1.5rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(5%, 5%); }
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+      color: var(--primary-foreground); margin-bottom: 0.5rem; letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle { font-size: 1.125rem; color: var(--primary-foreground); opacity: 0.9; }
+
+    .hero-meta { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
+    .hero-meta-item { text-align: center; }
+    .hero-meta-value { font-size: 1.5rem; font-weight: 700; color: var(--primary-foreground); }
+    .hero-meta-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-foreground); opacity: 0.8; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section { margin-bottom: 3rem; }
+
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+    .section-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .section-icon svg { width: 20px; height: 20px; color: var(--primary-foreground); }
+    .section-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow); transition: all 0.3s;
+    }
+
+    .card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+    .summary-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;
+    }
+
+    .summary-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      position: relative; overflow: hidden;
+    }
+
+    .summary-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+
+    .summary-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+    .summary-value { font-size: 1.75rem; font-weight: 700; color: var(--foreground); }
+    .summary-sub { font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+
+    .price-blank {
+      display: inline-block;
+      min-width: 80px;
+      border-bottom: 2px dashed var(--border);
+      color: var(--muted-foreground);
+      font-style: italic;
+    }
+
+    .table-wrapper { overflow-x: auto; margin-top: 1rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 600; background: var(--muted); color: var(--foreground); }
+    tr:hover { background: var(--muted); }
+
+    .phase-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--primary-foreground);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-weight: 600;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .phase-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 1.5rem;
+    }
+
+    .phase-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem; background: var(--accent); border-radius: var(--radius);
+      margin-top: 1rem; font-weight: 600;
+    }
+
+    .opex-category {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden;
+    }
+
+    .opex-category-header {
+      background: var(--muted); padding: 1rem 1.5rem;
+      font-weight: 600; display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .opex-category-content { padding: 0; }
+
+    .opex-service {
+      display: grid; grid-template-columns: 1fr auto auto;
+      padding: 0.75rem 1.5rem; border-bottom: 1px solid var(--border);
+      align-items: center; gap: 1rem;
+    }
+
+    .opex-service:last-child { border-bottom: none; }
+
+    .opex-service-name { font-weight: 500; }
+    .opex-service-purpose { font-size: 0.75rem; color: var(--muted-foreground); }
+    .opex-service-cost { font-weight: 500; text-align: right; white-space: nowrap; }
+
+    .opex-totals {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-top: 1.5rem;
+    }
+
+    .opex-total-card {
+      background: var(--accent); border: 2px solid var(--primary);
+      border-radius: var(--radius); padding: 1.5rem; text-align: center;
+    }
+
+    .opex-total-label { font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+    .opex-total-value { font-size: 1.5rem; font-weight: 700; color: var(--foreground); }
+    .opex-total-annual { font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+
+    .commercial-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;
+    }
+
+    .commercial-option {
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .commercial-option:hover { border-color: var(--primary); box-shadow: var(--shadow-lg); }
+
+    .commercial-option.recommended { border-color: var(--primary); }
+
+    .commercial-header {
+      padding: 1.5rem; text-align: center;
+      background: linear-gradient(135deg, var(--muted) 0%, var(--card) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .commercial-option.recommended .commercial-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--primary-foreground);
+    }
+
+    .commercial-badge {
+      display: inline-block; background: var(--secondary);
+      color: white; padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;
+    }
+
+    .commercial-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .commercial-desc { font-size: 0.875rem; opacity: 0.8; }
+
+    .commercial-content { padding: 1.5rem; }
+
+    .commercial-section { margin-bottom: 1.5rem; }
+    .commercial-section:last-child { margin-bottom: 0; }
+    .commercial-section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.75rem; }
+
+    .commercial-list { list-style: none; }
+
+    .commercial-list li {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      padding: 0.5rem 0; font-size: 0.875rem;
+    }
+
+    .commercial-list li::before {
+      content: '✓'; color: var(--primary); font-weight: bold; flex-shrink: 0;
+    }
+
+    .commercial-list.excluded li::before {
+      content: '✗'; color: var(--muted-foreground);
+    }
+
+    .comparison-table { margin-top: 2rem; }
+
+    .comparison-table th:first-child { width: 40%; }
+    .comparison-table td { text-align: center; }
+    .comparison-table td:first-child { text-align: left; font-weight: 500; }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 500;
+    }
+
+    .badge-high { background: rgba(34, 197, 94, 0.1); color: rgb(22, 163, 74); }
+    .badge-medium { background: rgba(251, 191, 36, 0.1); color: rgb(217, 119, 6); }
+    .badge-low { background: rgba(239, 68, 68, 0.1); color: rgb(220, 38, 38); }
+
+    .footer {
+      background: var(--foreground); color: var(--background);
+      padding: 2rem 1.5rem; text-align: center; margin-top: 3rem;
+    }
+
+    .footer-text { font-size: 0.875rem; opacity: 0.8; }
+
+    .note-box {
+      background: var(--accent); border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem; border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 1.5rem; font-size: 0.875rem;
+    }
+
+    .note-box strong { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { gap: 0; }
+      .nav-link { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+      .hero { padding: 3rem 1rem; }
+      .hero-meta { gap: 1rem; }
+      .container { padding: 2rem 1rem; }
+      .commercial-grid { grid-template-columns: 1fr; }
+      .opex-service { grid-template-columns: 1fr; gap: 0.25rem; }
+      .opex-service-cost { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="development-plan.html" class="logo">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="logo-text">Fleevigo Community</span>
+      </a>
+      <div class="nav-links">
+        <a href="development-plan.html" class="nav-link">Development</a>
+        <a href="financial-estimates.html" class="nav-link active">Finance</a>
+        <a href="tech-stack.html" class="nav-link">Tech Stack</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Financial Estimates</h1>
+      <p class="hero-subtitle">Development Investment & Operational Costs</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">CAPEX</div>
+          <div class="hero-meta-label">One-Time Development</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">OpEx</div>
+          <div class="hero-meta-label">Monthly Operations</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-value">10-12 Months</div>
+          <div class="hero-meta-label">Total Duration</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Investment Overview -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Investment Overview</h2>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">Phase 1 Development (CAPEX)</div>
+          <div class="summary-value">€<span class="price-blank">______</span></div>
+          <div class="summary-sub">6 months • Core Platform MVP</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Phase 2 Development (CAPEX)</div>
+          <div class="summary-value">€<span class="price-blank">______</span></div>
+          <div class="summary-sub">4-6 months • Growth & Expansion</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Monthly Operations (OpEx)</div>
+          <div class="summary-value">€57-817</div>
+          <div class="summary-sub">Variable by user volume</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Total Project CAPEX</div>
+          <div class="summary-value">€<span class="price-blank">______</span></div>
+          <div class="summary-sub">10-12 months total</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 1 CAPEX -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Phase 1: Core Platform Development</h2>
+      </div>
+      
+      <div class="phase-header">
+        <span>Development Investment</span>
+        <span>6 months (23 weeks)</span>
+      </div>
+      <div class="phase-content">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Development Area</th><th>Duration</th><th>Investment</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Foundation & Infrastructure</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Map & Location Features</td><td>4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Community & Social Features</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Communication Features</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Safety Features (SOS)</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Gamification</td><td>3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>UI/UX Implementation</td><td>2 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Testing, Deployment & Documentation</td><td>4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="phase-total">
+          <span>Development Subtotal (23 weeks)</span>
+          <span>€<span class="price-blank">______</span></span>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; font-weight: 600;">Additional Costs</h4>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Item</th><th>Timing</th><th>Investment</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Project Management</td><td>6 months</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Security Audit</td><td>End of phase</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>DevOps Review</td><td>Mid-phase</td><td>€<span class="price-blank">______</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="phase-total" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: var(--primary-foreground);">
+          <span>Phase 1 Total</span>
+          <span>€<span class="price-blank" style="border-color: var(--primary-foreground);">______</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 2 CAPEX -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Phase 2: Growth & Expansion Development</h2>
+      </div>
+      
+      <div class="phase-header" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%);">
+        <span>Development Investment</span>
+        <span>4-6 months</span>
+      </div>
+      <div class="phase-content">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Development Area</th><th>Duration</th><th>Investment</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>UX Research & Optimization</td><td>6-8 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Merchant Platform</td><td>6-8 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Advanced Admin Dashboard</td><td>4-6 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Local Integrations (Malta & Kenya)</td><td>4-6 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Offline Support</td><td>3-4 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Native App Preparation</td><td>2-3 weeks</td><td>€<span class="price-blank">______</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="phase-total">
+          <span>Development Subtotal (4-6 months)</span>
+          <span>€<span class="price-blank">______</span></span>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; font-weight: 600;">Additional Costs</h4>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Item</th><th>Timing</th><th>Investment</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Project Management</td><td>4-6 months</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>UX Researcher</td><td>Research phase</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Payment Integration Specialist</td><td>Integration phase</td><td>€<span class="price-blank">______</span></td></tr>
+              <tr><td>Security Audit</td><td>End of phase</td><td>€<span class="price-blank">______</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="phase-total" style="background: linear-gradient(135deg, var(--secondary) 0%, oklch(0.6 0.2 20) 100%); color: white;">
+          <span>Phase 2 Total</span>
+          <span>€<span class="price-blank" style="border-color: white;">______</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- OpEx -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Operational Costs (OpEx)</h2>
+      </div>
+      <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        Monthly operational costs vary based on user volume and feature usage. Estimates provided for two scenarios: 500 users/month and 5,000 users/month.
+      </p>
+
+      <!-- Infrastructure Services -->
+      <div class="opex-category">
+        <div class="opex-category-header">
+          <span>Infrastructure Services</span>
+          <span style="font-size: 0.875rem; font-weight: 400;">Core platform infrastructure</span>
+        </div>
+        <div class="opex-category-content">
+          <div class="opex-service" style="background: var(--muted); font-weight: 600;">
+            <div>Service</div>
+            <div style="text-align: right;">500 Users/mo</div>
+            <div style="text-align: right;">5,000 Users/mo</div>
+          </div>
+          
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Supabase Pro Plan</div>
+              <div class="opex-service-purpose">Database, Auth, Realtime, Storage</div>
+            </div>
+            <div class="opex-service-cost">€25</div>
+            <div class="opex-service-cost">€25</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Supabase Database Compute</div>
+              <div class="opex-service-purpose">Additional capacity</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€50-100</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Supabase Realtime Connections</div>
+              <div class="opex-service-purpose">Concurrent users</div>
+            </div>
+            <div class="opex-service-cost">Included</div>
+            <div class="opex-service-cost">€50-100</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Supabase Storage</div>
+              <div class="opex-service-purpose">Media files</div>
+            </div>
+            <div class="opex-service-cost">Included</div>
+            <div class="opex-service-cost">€25-50</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Vercel Pro Plan</div>
+              <div class="opex-service-purpose">Deployment, CDN</div>
+            </div>
+            <div class="opex-service-cost">€20</div>
+            <div class="opex-service-cost">€20</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Vercel Bandwidth</div>
+              <div class="opex-service-purpose">Data transfer</div>
+            </div>
+            <div class="opex-service-cost">Included</div>
+            <div class="opex-service-cost">€0-50</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Vercel Serverless Functions</div>
+              <div class="opex-service-purpose">API calls</div>
+            </div>
+            <div class="opex-service-cost">Included</div>
+            <div class="opex-service-cost">€0-25</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Mapbox</div>
+              <div class="opex-service-purpose">Map rendering (50K free loads)</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€50-150</div>
+          </div>
+          <div class="opex-service" style="background: var(--accent); font-weight: 600;">
+            <div>Infrastructure Subtotal</div>
+            <div class="opex-service-cost">€45-50</div>
+            <div class="opex-service-cost">€220-520</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third-Party Services -->
+      <div class="opex-category">
+        <div class="opex-category-header">
+          <span>Third-Party Services</span>
+          <span style="font-size: 0.875rem; font-weight: 400;">Notifications, SMS, Email, Monitoring</span>
+        </div>
+        <div class="opex-category-content">
+          <div class="opex-service" style="background: var(--muted); font-weight: 600;">
+            <div>Service</div>
+            <div style="text-align: right;">500 Users/mo</div>
+            <div style="text-align: right;">5,000 Users/mo</div>
+          </div>
+          
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">OneSignal Free Tier</div>
+              <div class="opex-service-purpose">Push notifications (up to 10K subscribers)</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€0</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">OneSignal Growth Plan</div>
+              <div class="opex-service-purpose">Additional features</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€9-99</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Twilio SMS</div>
+              <div class="opex-service-purpose">SOS fallback emergency alerts</div>
+            </div>
+            <div class="opex-service-cost">€10-25</div>
+            <div class="opex-service-cost">€50-150</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Resend Free Tier</div>
+              <div class="opex-service-purpose">Transactional email (3K/month)</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€0</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Resend Pro Plan</div>
+              <div class="opex-service-purpose">Additional email volume</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€20</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Sentry Free Tier</div>
+              <div class="opex-service-purpose">Error monitoring (5K errors/month)</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€0</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Sentry Team Plan</div>
+              <div class="opex-service-purpose">Higher volume</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€26</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Mixpanel Free Tier</div>
+              <div class="opex-service-purpose">Analytics (20M events/month)</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€0</div>
+          </div>
+          <div class="opex-service" style="background: var(--accent); font-weight: 600;">
+            <div>Services Subtotal</div>
+            <div class="opex-service-cost">€10-25</div>
+            <div class="opex-service-cost">€105-295</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domain & Security -->
+      <div class="opex-category">
+        <div class="opex-category-header">
+          <span>Domain & Security</span>
+          <span style="font-size: 0.875rem; font-weight: 400;">Domain registration, SSL</span>
+        </div>
+        <div class="opex-category-content">
+          <div class="opex-service" style="background: var(--muted); font-weight: 600;">
+            <div>Service</div>
+            <div style="text-align: right;">500 Users/mo</div>
+            <div style="text-align: right;">5,000 Users/mo</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">Domain Registration</div>
+              <div class="opex-service-purpose">Annual (amortized monthly)</div>
+            </div>
+            <div class="opex-service-cost">€2</div>
+            <div class="opex-service-cost">€2</div>
+          </div>
+          <div class="opex-service">
+            <div>
+              <div class="opex-service-name">SSL Certificate</div>
+              <div class="opex-service-purpose">Included with Vercel</div>
+            </div>
+            <div class="opex-service-cost">€0</div>
+            <div class="opex-service-cost">€0</div>
+          </div>
+          <div class="opex-service" style="background: var(--accent); font-weight: 600;">
+            <div>Domain Subtotal</div>
+            <div class="opex-service-cost">€2</div>
+            <div class="opex-service-cost">€2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OpEx Totals -->
+      <div class="opex-totals">
+        <div class="opex-total-card">
+          <div class="opex-total-label">500 Users/Month</div>
+          <div class="opex-total-value">€57-77/mo</div>
+          <div class="opex-total-annual">Annual: €684-924</div>
+        </div>
+        <div class="opex-total-card">
+          <div class="opex-total-label">5,000 Users/Month</div>
+          <div class="opex-total-value">€327-817/mo</div>
+          <div class="opex-total-annual">Annual: €3,924-9,804</div>
+        </div>
+      </div>
+
+      <!-- Phase 2 Additional OpEx -->
+      <div class="note-box" style="margin-top: 2rem;">
+        <strong>Phase 2 Additional OpEx:</strong> Merchant features may add €50-300/month including M-Pesa integration (transaction fees), local payment gateway (€50-200), and enhanced analytics (€0-100).
+      </div>
+    </section>
+
+    <!-- Commercial Options -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Commercial Options</h2>
+      </div>
+      <p style="color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        Epic Growth offers two engagement models. Select one or combine based on project needs.
+      </p>
+
+      <div class="commercial-grid">
+        <!-- Option A: Fixed-Price -->
+        <div class="commercial-option">
+          <div class="commercial-header">
+            <div class="commercial-title">Option A: Fixed-Price Development</div>
+            <div class="commercial-desc">Full development delivered for a fixed price with milestone-based payments</div>
+          </div>
+          <div class="commercial-content">
+            <div class="commercial-section">
+              <div class="commercial-section-title">What's Included</div>
+              <ul class="commercial-list">
+                <li>All development as specified in Development Plan</li>
+                <li>Project management and coordination</li>
+                <li>Specialist audits at defined checkpoints</li>
+                <li>Testing and quality assurance</li>
+                <li>Deployment and documentation</li>
+                <li>30-day post-launch bug fixes (critical issues)</li>
+              </ul>
+            </div>
+            <div class="commercial-section">
+              <div class="commercial-section-title">What's Not Included</div>
+              <ul class="commercial-list excluded">
+                <li>Scope changes beyond defined features</li>
+                <li>Third-party service costs (OpEx)</li>
+                <li>Content creation or data population</li>
+                <li>Ongoing maintenance beyond 30-day warranty</li>
+              </ul>
+            </div>
+            <div class="commercial-section">
+              <div class="commercial-section-title">Estimated Investment</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">
+                Phase 1: €<span class="price-blank">______</span><br>
+                Phase 2: €<span class="price-blank">______</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Option B: Retainer -->
+        <div class="commercial-option recommended">
+          <div class="commercial-header">
+            <div class="commercial-badge">Recommended for Phase 2</div>
+            <div class="commercial-title">Option B: Consultancy Retainer</div>
+            <div class="commercial-desc">Monthly retainer for ongoing development leadership with flexible scope</div>
+          </div>
+          <div class="commercial-content">
+            <div class="commercial-section">
+              <div class="commercial-section-title">What's Included</div>
+              <ul class="commercial-list">
+                <li>Dedicated project management</li>
+                <li>Weekly status updates and planning</li>
+                <li>Flexible prioritization of features</li>
+                <li>Continuous delivery approach</li>
+                <li>Ongoing code quality oversight</li>
+                <li>Direct communication channels</li>
+              </ul>
+            </div>
+            <div class="commercial-section">
+              <div class="commercial-section-title">Benefits</div>
+              <ul class="commercial-list">
+                <li>Flexibility to adjust priorities based on user feedback</li>
+                <li>No scope change negotiations</li>
+                <li>Continuous improvement mindset</li>
+                <li>Lower risk for both parties</li>
+              </ul>
+            </div>
+            <div class="commercial-section">
+              <div class="commercial-section-title">Monthly Retainer</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">
+                €<span class="price-blank">______</span>/month
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="table-wrapper comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Aspect</th>
+              <th>Fixed-Price</th>
+              <th>Retainer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Budget Certainty</td>
+              <td><span class="badge badge-high">High</span></td>
+              <td><span class="badge badge-medium">Medium</span></td>
+            </tr>
+            <tr>
+              <td>Scope Flexibility</td>
+              <td><span class="badge badge-low">Low</span></td>
+              <td><span class="badge badge-high">High</span></td>
+            </tr>
+            <tr>
+              <td>Risk Allocation</td>
+              <td>Provider bears more</td>
+              <td>Shared</td>
+            </tr>
+            <tr>
+              <td>Change Management</td>
+              <td>Formal process</td>
+              <td>Ongoing prioritization</td>
+            </tr>
+            <tr>
+              <td>Best For</td>
+              <td>Well-defined MVP</td>
+              <td>Evolving products</td>
+            </tr>
+            <tr>
+              <td>Payment Structure</td>
+              <td>Milestone-based</td>
+              <td>Monthly</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note-box">
+        <strong>Recommended Approach:</strong> Hybrid Model — Fixed-price for Phase 1 (well-defined MVP scope) transitioning to retainer for Phase 2 (requires flexibility based on UX research and user feedback).
+      </div>
+    </section>
+
+    <!-- Payment Terms -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <h2 class="section-title">Payment Terms</h2>
+      </div>
+      
+      <div class="summary-grid">
+        <div class="card">
+          <h4 style="font-weight: 600; margin-bottom: 1rem;">Fixed-Price Terms</h4>
+          <ul style="list-style: none; font-size: 0.875rem; color: var(--muted-foreground);">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Invoices issued at milestone completion</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Payment due within 14 days of invoice</li>
+            <li style="padding: 0.5rem 0;">Phase 2 requires signed amendment</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="font-weight: 600; margin-bottom: 1rem;">Retainer Terms</h4>
+          <ul style="list-style: none; font-size: 0.875rem; color: var(--muted-foreground);">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Monthly invoice at month-end</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Payment due within 14 days</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Development hours reported weekly</li>
+            <li style="padding: 0.5rem 0;">30-day notice for retainer changes</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="font-weight: 600; margin-bottom: 1rem;">Additional Terms</h4>
+          <ul style="list-style: none; font-size: 0.875rem; color: var(--muted-foreground);">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">All prices exclude VAT (where applicable)</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Third-party service costs (OpEx) invoiced separately at cost</li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">Currency: EUR</li>
+            <li style="padding: 0.5rem 0;">Proposal valid for 30 days</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p class="footer-text">Fleevigo Community Financial Proposal &nbsp;|&nbsp; Prepared by Epic Growth &nbsp;|&nbsp; January 2025 &nbsp;|&nbsp; v1.0</p>
+  </footer>
+</body>
+</html>
